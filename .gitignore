@@ -1,0 +1,34 @@
+# Unity
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/UserSettings/
+/Build/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# MSBuild
+[Dd]ebug*/
+[Dd]ebugPublic*/
+[Rr]elease*/
+[Rr]eleases*/
+x64/
+x86/
+arm/
+arm64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# NuGet
+.nuget/
+packages/
+
+# JetBrains Rider
+.idea/
