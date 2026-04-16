@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static SettingsCore;
@@ -46,12 +47,13 @@ public class SettingsCore : MonoBehaviour
         gameSettings.audioSettings.VoiceVolume = Convertor.ReadINT(Data, "Voice Volume", 50);
         gameSettings.audioSettings.UiVolume = Convertor.ReadINT(Data, "UI Volume", 50);
 
-        gameSettings.keyControll.MoveBack = Convertor.ReadSTRING(Data, "Front", "d");
-        gameSettings.keyControll.MoveFront = Convertor.ReadSTRING(Data, "Back", "a");
-        gameSettings.keyControll.MoveUp = Convertor.ReadSTRING(Data, "Up", "w");
+        gameSettings.keyControll.MoveFront = Convertor.ReadSTRING(Data, "Front", "d");
+        gameSettings.keyControll.MoveBack = Convertor.ReadSTRING(Data, "Back", "a");
         gameSettings.keyControll.MoveDown = Convertor.ReadSTRING(Data, "Down", "s");
         gameSettings.keyControll.MenuButton = Convertor.ReadSTRING(Data, "JumpButton", "space");
         gameSettings.keyControll.JumpButton = Convertor.ReadSTRING(Data, "MenuButton", "escape");
+        gameSettings.keyControll.DashTeleportButton = Convertor.ReadSTRING(Data, "Dash/TeleportButton", "w");
+        gameSettings.keyControll.InvulnerabilityButton = Convertor.ReadSTRING(Data, "InvulnerabilityButton", "q");
 
         gameSettings.screenSettings.typeScreen = Convertor.ReadENUM(Data, "typeScreen", TypeScreen.Windowed);
 
@@ -142,10 +144,11 @@ public class FileSystem : MonoBehaviour
                     "[KEYS]",
                     "            Front:" + SCore.gameSettings.keyControll.MoveFront,
                     "             Back:" + SCore.gameSettings.keyControll.MoveBack,
-                    "             Up:" + SCore.gameSettings.keyControll.MoveUp,
                     "             Down:" + SCore.gameSettings.keyControll.MoveDown,
                     "       JumpButton:" + SCore.gameSettings.keyControll.JumpButton,
                     "       MenuButton:" + SCore.gameSettings.keyControll.MenuButton,
+                    "       Dash/TeleportButton:" + SCore.gameSettings.keyControll.DashTeleportButton,
+                    "InvulnerabilityButton:" + SCore.gameSettings.keyControll.InvulnerabilityButton,
                 };
                 SCore.SetNewSettings(Data);
                 break;
@@ -314,13 +317,14 @@ public class AudioSettings
 public class KeyControll
 {
     public string Action = "e";
-    public string boost = "left Shift";
+    public string boost = "left shift";
     public string MoveFront = "d";
     public string MoveBack = "a";
-    public string MoveUp = "w";
     public string MoveDown = "s";
     public string JumpButton = "space";
     public string MenuButton = "escape";
+    public string DashTeleportButton = "w";
+    public string InvulnerabilityButton = "q";
 }
 [System.Serializable]
 public class PathData
@@ -349,4 +353,38 @@ public enum TypeScreen
 public enum TypeFile
 {
     Settings, Network, Log, Save, Other
+}
+
+public enum TypeAI
+{
+    Walking, Flying, Raising, Other
+}
+
+[System.Serializable]
+public class WeaponItem
+{
+    public string NameWeapon = "Безымянный";
+    public string information = "";
+    public Sprite IconItem;
+    public float damage = 1f; 
+    public TypeWeapon typeWeapon = TypeWeapon.NotWeapon;
+}
+
+public class Converter : MonoBehaviour
+{
+    public static WeaponItem GetItemForIndex(WeaponItem[] Array, int index, WeaponItem ErrorData)
+    {
+        WeaponItem result = ErrorData;
+        for (int i = 0; i < Array.Length; i++)
+        {
+            if (index == i) { result = Array[i]; break; }
+        }
+
+        return result;
+    }
+}
+
+public enum TypeWeapon
+{ 
+    ByDistance, NotWeapon, NearRangeAttack
 }

@@ -36,6 +36,8 @@ public class MyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         targetSize = normalSize;
     }
 
+    public void AddClick(UnityEngine.Events.UnityAction action) => m_OnClick.AddListener(action);
+
     private void OnDisable()
     {
         transform.localScale = normalSize;
@@ -63,7 +65,7 @@ public class MyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Update()
     {
-        // Используем Time.unscaledDeltaTime вместо Time.deltaTime
+        // ?????????? Time.unscaledDeltaTime ?????? Time.deltaTime
         MineUI.color = Color.Lerp(MineUI.color, current, Time.unscaledDeltaTime * 10f);
         transform.localScale = Vector3.Lerp(transform.localScale, targetSize, Time.unscaledDeltaTime * sizeSpeed);
     }

@@ -15,6 +15,45 @@ EditorBuildSettings:
     path: Assets/Import/Scenes/MainScene.unity
     guid: e2e529cd757529c49875cf0dd219ec66
   - enabled: 1
-    path: Assets/Import/Scenes/L1.unity
+    path: Assets/Import/Scenes/Level1/L1.unity
     guid: 0bc957b1f892f1e4ba9797d185945f40
+  - enabled: 1
+    path: Assets/Import/Scenes/Level1/L1Part2.unity
+    guid: 048e0c646e7d3dc47a479eb794861f7b
+  - enabled: 1
+    path: Assets/Import/Scenes/Level1/L1Part3.unity
+    guid: 2ccb84cbb596b9640a054165f645f85b
+  - enabled: 1
+    path: Assets/Import/Scenes/Level1/L1Part4.unity
+    guid: cdd6afd7166e28945a8895071f281ed6
+  - enabled: 1
+    path: Assets/Import/Scenes/Level2/L2.unity
+    guid: 1c51b1029769a3a42a51fbcd995a2b9a
+  - enabled: 1
+    path: Assets/Import/Scenes/Level3/L3.unity
+    guid: e86124fe01deee8429c73d42ecefb211
+  - enabled: 1
+    path: Assets/Import/Scenes/Level3/L3part2.unity
+    guid: 5613ce0d4181a5b4ab20d4da05c15b17
+  - enabled: 1
+    path: Assets/Import/Scenes/TrainLevel/TrainL.unity
+    guid: 779b88ae2b472e142a0064ca84f0d62a
+  - enabled: 1
+    path: Assets/Import/Scenes/Level1/L1Part5.unity
+    guid: 86933730e28390b439af25fd3766aebe
+  - enabled: 1
+    path: Assets/Import/Scenes/Level1/L1.2.unity
+    guid: 49b7dfb7e2c1ab44bb2ccf71e4a0b38a
+  - enabled: 1
+    path: Assets/Import/Scenes/Level3/L3.2.unity
+    guid: 6c00caf31b29b2d43b29128dc5b432fa
+  - enabled: 1
+    path: Assets/Import/Scenes/Upgrades.unity
+    guid: a7a125f854ffb2446a359a03375191b4
+  - enabled: 1
+    path: Assets/Import/NAD/MainMenuNAD.unity
+    guid: 1a14164c181a00846aa5773695174b8f
+  - enabled: 1
+    path: Assets/Import/NAD/DreamRunning.unity
+    guid: a1ab38c72656eaf469885624ef0e21b2
   m_configObjects: {}

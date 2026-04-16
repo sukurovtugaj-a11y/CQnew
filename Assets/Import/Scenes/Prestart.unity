@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414736, b: 0.12107852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &1215050033
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1215050035}
+  - component: {fileID: 1215050034}
+  m_Layer: 0
+  m_Name: GameProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1215050034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215050033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c8cc84459983d145962ac6c131c4dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1215050035
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215050033}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 385.79504, y: 360.31387, z: 5.0236464}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1960622595
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +196,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5f78e35d470314e8254b79f6ca31ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettings:
+    pathData:
+      GameSettingsPath: /GameSettings.ini
+      NetworkSettingsPath: /NetworkSettings.ini
+      LogErrorPath: /Logs/
+      SavePath: /Save/
+    Version: 0.001a
+    screenSettings:
+      resolution: {x: 1920, y: 1080}
+      typeScreen: 1
+    audioSettings:
+      MusicVolume: 50
+      EffectVolume: 50
+      VoiceVolume: 50
+      UiVolume: 50
+    keyControll:
+      Action: e
+      boost: left shift
+      MoveFront: d
+      MoveBack: a
+      MoveDown: s
+      JumpButton: space
+      MenuButton: escape
+      DashTeleportButton: w
+      InvulnerabilityButton: q
+  fileSystem: {fileID: 0}
+  sceneChanger: {fileID: 0}
 --- !u!4 &1960622597
 Transform:
   m_ObjectHideFlags: 0

@@ -1,14 +1,28 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    [SerializeField]
+    private Timer CurrentTimer;
+
+    [Header("Settings")]
     public SettingsCore settingsCore;
-    public MainCharacter player;
+    public GameObject playerPrefab;
+
+    [Header("Menu Reference (обязательно назначь!)")]
+    [Tooltip("Ссылка на объект с PlayerMenuScript для закрытия меню перед переходом")]
+    public PlayerMenuScript menuScript;
 
     private void Start()
     {
-        settingsCore = FindObjectOfType<SettingsCore>();
+        // Создаём EventSystem если нет (нужен для работы UI/кнопок)
+        EnsureEventSystemExists();
+
+        if (settingsCore == null)
+            settingsCore = FindObjectOfType<SettingsCore>();
+
         if (settingsCore == null)
         {
             SceneManager.LoadScene("Prestart");
@@ -17,8 +31,42 @@ public class SceneController : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name != "MainMenu")
         {
-            player = Instantiate(player, Vector3.zero, Quaternion.Euler(0, 0, 0), null);
-            player.OnStart(this);
+            var inst = Instantiate(playerPrefab, Vector3.zero, Quaternion.Euler(0, 0, 0), null);
+
+            var sec = inst.GetComponent<SecMainCharacter>();
+            if (sec != null)
+            {
+                sec.OnStart(this);
+                if (SpawnPointManager.Instance != null)
+                    SpawnPointManager.Instance.ApplySpawnPointToSec(sec);
+            }
+            else
+            {
+                var main = inst.GetComponent<MainCharacter>();
+                main.OnStart(this);
+                if (SpawnPointManager.Instance != null)
+                    SpawnPointManager.Instance.ApplySpawnPoint(main);
+            }
+        }
+    }
+
+    public void ChangeValue(int value)
+    {
+        if (CurrentTimer != null) { CurrentTimer.TimeValue += value; }
+    }
+
+    private void EnsureEventSystemExists()
+    {
+        if (FindObjectOfType<EventSystem>() == null)
+        {
+            GameObject eventSystem = new GameObject("EventSystem");
+            eventSystem.AddComponent<EventSystem>();
+
+            // Добавляем StandaloneInputModule для обработки ввода (мышь/клавиатура)
+            var standaloneInput = eventSystem.AddComponent<StandaloneInputModule>();
+            standaloneInput.forceModuleActive = true;
+
+            Debug.Log("[SceneController] EventSystem создан автоматически");
         }
     }
 
@@ -27,27 +75,28 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 
+    /// <summary>
+    /// 🔥 ЗАГРУЗКА СЦЕНЫ — работает даже если меню открыто и timeScale = 0
+    /// </summary>
     public void LoadScene(string NameScene)
     {
-        settingsCore.sceneChanger.LoadNewScene(NameScene, 0.5f);
-    }
-
-    public void SaveGame()
-    {
-        string nameFile = "SaveTest.txt";
-        string path = settingsCore.gameSettings.pathData.SavePath + nameFile;
-        string[] SavingData = new string[]
+        // 1. Закрываем меню, если есть ссылка
+        if (menuScript != null)
         {
-        "[GENERAL]",
-        $"   Name scene: {SceneManager.GetActiveScene().name}",
-        "   Position: " + player.transform.position.ToString().Replace("(", "").Replace(")", ""),
-        "   Rotation: " + player.transform.rotation.eulerAngles.ToString().Replace("(", "").Replace(")", ""),
-        "   Flip: " + player.GetComponent<SpriteRenderer>().flipX,
-        $"   Health: {0}",
-        $"   Money: {0}",
-        "[INVENTORY]",
-        "[EFFECTS]"
-        };
-        settingsCore.fileSystem.WriteData(path, SavingData);
+            menuScript.CloseCurrentPanel();
+        }
+        else
+        {
+            // Если ссылки нет — ищем в сцене (запасной вариант)
+            var foundMenu = FindObjectOfType<PlayerMenuScript>();
+            if (foundMenu != null)
+                foundMenu.CloseCurrentPanel();
+        }
+
+        // 2. 🔥 ПРИНУДИТЕЛЬНО восстанавливаем время — гарантируем, что всё заработает
+        Time.timeScale = 1f;
+
+        // 3. Загружаем сцену напрямую через Unity (надёжно и быстро)
+        SceneManager.LoadScene(NameScene, LoadSceneMode.Single);
     }
 }

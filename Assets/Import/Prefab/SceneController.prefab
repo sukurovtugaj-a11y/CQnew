@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2593642687276668130
 Transform:
   m_ObjectHideFlags: 0
@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4320b1f1c70814dbb5b3c84ad8175a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentTimer: {fileID: 0}
   settingsCore: {fileID: 0}
-  player: {fileID: 2168757927941769280, guid: 0338f8f8a28107a44a3b01a79566fd04, type: 3}
+  playerPrefab: {fileID: 7880914315446776174, guid: 4991dc90c2cfca14a8fda510858b4f6d, type: 3}
+  menuScript: {fileID: 0}

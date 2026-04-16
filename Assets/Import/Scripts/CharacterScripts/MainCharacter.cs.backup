@@ -1,0 +1,345 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class MainCharacter : MonoBehaviour
+{
+    private enum PlayerState { Grounded, Airborne }
+
+    // Ссылки
+    public KeyControll keys;
+    public SceneController SC;
+    public GameObject MenuPanel;
+    public CameraController cameraController;
+
+    // Параметры
+    [Header("Movement")] public float moveSpeed = 5f;
+    public float airControl = 0.5f;
+
+    [Header("Jump")] public float jumpHeight = 3f;
+    public float coyoteTime = 0.3f;
+    public float jumpBufferTime = 0.15f;
+
+    [Header("Double Jump")]
+    [Tooltip("Количество дополнительных прыжков в воздухе")]
+    public int maxExtraJumps = 0;
+
+    [Header("Upgrades")] public List<JumpAbilityData> activeAbilities = new List<JumpAbilityData>();
+
+    [Header("Advanced")] public float groundStickForce = 2f;
+
+    // Компоненты
+    private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private Collider2D playerCollider;
+
+    // Переменные состояния
+    private PlayerState currentState;
+    private int extraJumpsLeft;
+    private float jumpSpeed;
+    private float baseJumpHeight;
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
+    private float horizontalInput;
+    private bool isBoosting;
+
+    // Платформы
+    private MonoBehaviour currentPlatform;
+    private bool isParentMode = false;
+
+    // Фильтр для детекции земли
+    private ContactFilter2D groundFilter;
+    private Collider2D[] groundContacts = new Collider2D[5];
+
+    public void Damage(float dam)
+    { 
+    
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        playerCollider = GetComponent<Collider2D>();
+
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.interpolation = RigidbodyInterpolation2D.None;
+        rb.freezeRotation = true;
+
+        SetupGroundFilter();
+        baseJumpHeight = jumpHeight;
+
+        int initialMaxExtraJumps = maxExtraJumps;
+        RecalculateJumpParameters();
+
+        if (activeAbilities.Count == 0)
+        {
+            maxExtraJumps = initialMaxExtraJumps;
+            extraJumpsLeft = maxExtraJumps;
+        }
+
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+    }
+
+    private void SetupGroundFilter()
+    {
+        groundFilter = new ContactFilter2D();
+        int groundLayer = LayerMask.NameToLayer("Ground");
+        int platformLayer = LayerMask.NameToLayer("Platform");
+        int mask = (platformLayer != -1) ? (1 << groundLayer) | (1 << platformLayer) : (1 << groundLayer);
+        groundFilter.SetLayerMask(mask);
+        groundFilter.useLayerMask = true;
+        groundFilter.useNormalAngle = true;
+        groundFilter.minNormalAngle = 45f;
+        groundFilter.maxNormalAngle = 135f;
+    }
+
+    public void OnStart(SceneController sc)
+    {
+        SC = sc;
+        CreatePlayerCamera();
+        currentState = PlayerState.Grounded;
+        extraJumpsLeft = maxExtraJumps;
+        Cursor.visible = false;
+        this.enabled = true;
+    }
+
+    private void CreatePlayerCamera()
+    {
+        GameObject cameraObject = new GameObject("PlayerCamera");
+        cameraObject.AddComponent<Camera>();
+        cameraController = cameraObject.AddComponent<CameraController>();
+        cameraController.target = transform;
+        cameraObject.transform.position = transform.position + new Vector3(0, 1, -10);
+    }
+
+    private void Start()
+    {
+        if (extraJumpsLeft <= 0 && maxExtraJumps > 0) extraJumpsLeft = maxExtraJumps;
+    }
+
+    private void Update()
+    {
+        if (!MenuPanel.activeSelf && Time.timeScale > 0) HandleInput();
+        if (Input.GetKeyDown(KeyCode.Escape)) ToggleMenu();
+        if (Input.GetKeyDown(KeyCode.F5)) SaveGame();
+    }
+
+    private void FixedUpdate()
+    {
+        if (MenuPanel.activeSelf || Time.timeScale <= 0) return;
+
+        bool isGrounded = IsGrounded();
+        UpdateTimers(isGrounded);
+        UpdateState(isGrounded);
+        ApplyMovement();
+
+        if (currentPlatform == null && isGrounded && Mathf.Abs(horizontalInput) > 0.01f)
+        {
+            rb.AddForce(Vector2.down * groundStickForce, ForceMode2D.Force);
+        }
+
+        HandleJumpRequests();
+        UpdateAnimations();
+        CheckMovingPlatform(isGrounded);
+    }
+
+    private void HandleInput()
+    {
+        horizontalInput = Input.GetKey(keys.MoveFront) ? 1 : Input.GetKey(keys.MoveBack) ? -1 : 0;
+        if (horizontalInput != 0) spriteRenderer.flipX = horizontalInput > 0;
+        isBoosting = Input.GetKey(keys.boost);
+        if (Input.GetKeyDown(keys.JumpButton)) jumpBufferCounter = jumpBufferTime;
+    }
+
+    private void ToggleMenu()
+    {
+        bool menuActive = !MenuPanel.activeSelf;
+        MenuPanel.SetActive(menuActive);
+        Cursor.visible = menuActive;
+        Time.timeScale = menuActive ? 0f : 1f;
+        Time.fixedDeltaTime = 0.02f;
+    }
+
+    private bool IsGrounded() => rb.GetContacts(groundFilter, groundContacts) > 0;
+
+    private void UpdateTimers(bool isGrounded)
+    {
+        coyoteTimeCounter = isGrounded ? coyoteTime : coyoteTimeCounter - Time.fixedDeltaTime;
+        if (jumpBufferCounter > 0) jumpBufferCounter -= Time.deltaTime;
+    }
+
+    private void UpdateState(bool isGrounded)
+    {
+        PlayerState previousState = currentState;
+        if (currentState == PlayerState.Grounded && !isGrounded) currentState = PlayerState.Airborne;
+        if (currentState == PlayerState.Airborne && isGrounded)
+        {
+            currentState = PlayerState.Grounded;
+            extraJumpsLeft = maxExtraJumps;
+        }
+    }
+
+    private void ApplyMovement()
+    {
+        float speed = moveSpeed * (isBoosting ? 2f : 1f);
+        float control = 1f;
+
+        if (currentState == PlayerState.Airborne)
+        {
+            speed *= airControl;
+            control = airControl;
+        }
+
+        if (currentPlatform != null && isParentMode)
+        {
+            rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y); 
+        }
+        else
+        {
+            Vector2 targetVelocity = new Vector2(horizontalInput * speed, rb.velocity.y);
+            rb.velocity = Vector2.Lerp(rb.velocity, targetVelocity, control);
+        }
+    }
+
+    private void HandleJumpRequests()
+    {
+        if (jumpBufferCounter <= 0) return;
+        bool isGrounded = IsGrounded();
+        bool canGroundJump = (isGrounded || coyoteTimeCounter > 0);
+        bool canAirJump = currentState == PlayerState.Airborne && extraJumpsLeft > 0;
+
+        if (canGroundJump) { ExecuteGroundJump(); jumpBufferCounter = 0; }
+        else if (canAirJump) { ExecuteAirJump(); jumpBufferCounter = 0; }
+    }
+
+    private void ExecuteGroundJump()
+    {
+        DetachFromPlatform();
+        rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+        currentState = PlayerState.Airborne;
+        extraJumpsLeft = maxExtraJumps;
+        coyoteTimeCounter = 0;
+    }
+
+    private void ExecuteAirJump()
+    {
+        DetachFromPlatform();
+        rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+        extraJumpsLeft--;
+        coyoteTimeCounter = 0;
+    }
+
+    // === ПЛАТФОРМЫ — ПРОСТАЯ ЛОГИКА ===
+
+    private void CheckMovingPlatform(bool isGrounded)
+    {
+        if (!isGrounded) { DetachFromPlatform(); return; }
+
+        if (currentPlatform != null)
+        {
+            if (!IsActuallyOnTop(currentPlatform.GetComponent<Collider2D>()))
+                DetachFromPlatform();
+            else
+            {
+                // Для вертикальной платформы — добавляем её скорость к игроку
+                if (!isParentMode && currentPlatform is MovingPlatform_Vertical vert)
+                {
+                    rb.velocity += vert.PlatformVelocity;
+                }
+            }
+            return;
+        }
+
+        for (int i = 0; i < groundContacts.Length; i++)
+        {
+            if (groundContacts[i] == null) continue;
+
+            // Пробуем горизонтальную (SetParent)
+            var horiz = groundContacts[i].GetComponent<MovingPlatform_Horizontal>();
+            if (horiz != null && IsActuallyOnTop(groundContacts[i]))
+            {
+                AttachToHorizontal(horiz);
+                return;
+            }
+
+            // Пробуем вертикальную (Kinematic)
+            var vert = groundContacts[i].GetComponent<MovingPlatform_Vertical>();
+            if (vert != null && IsActuallyOnTop(groundContacts[i]))
+            {
+                AttachToVertical(vert);
+                return;
+            }
+        }
+    }
+
+    private bool IsActuallyOnTop(Collider2D platCollider)
+    {
+        float playerFeetY = transform.position.y - playerCollider.bounds.extents.y;
+        float platformTopY = platCollider.bounds.max.y;
+        return playerFeetY <= platformTopY + 0.15f && playerFeetY >= platformTopY - 0.1f;
+    }
+
+    private void AttachToHorizontal(MovingPlatform_Horizontal platform)
+    {
+        currentPlatform = platform;
+        isParentMode = true;
+        transform.SetParent(platform.transform);
+    }
+
+    private void AttachToVertical(MovingPlatform_Vertical platform)
+    {
+        currentPlatform = platform;
+        isParentMode = false;
+    }
+
+    private void DetachFromPlatform()
+    {
+        if (currentPlatform != null)
+        {
+            if (isParentMode) transform.SetParent(null);
+            currentPlatform = null;
+            isParentMode = false;
+        }
+    }
+
+    // ===============================================
+
+    private void UpdateAnimations()
+    {
+        if (MenuPanel.activeSelf || Time.timeScale <= 0) return;
+        animator.SetBool("Moving", Mathf.Abs(horizontalInput) > 0.1f);
+        animator.SetBool("IsGrounded", currentState == PlayerState.Grounded);
+    }
+
+    public void AddJumpAbility(JumpAbilityData ability) { activeAbilities.Add(ability); RecalculateJumpParameters(); }
+    public void RemoveJumpAbility(JumpAbilityData ability) { activeAbilities.Remove(ability); RecalculateJumpParameters(); }
+
+    private void RecalculateJumpParameters()
+    {
+        int originalMaxExtraJumps = maxExtraJumps;
+        maxExtraJumps = 0;
+        jumpHeight = baseJumpHeight;
+        foreach (var ability in activeAbilities)
+        {
+            maxExtraJumps += ability.additionalJumps;
+            jumpHeight = Mathf.Max(jumpHeight, baseJumpHeight * ability.heightMultiplier);
+        }
+        if (activeAbilities.Count == 0) maxExtraJumps = originalMaxExtraJumps;
+        float gravity = Physics2D.gravity.y * rb.gravityScale;
+        jumpSpeed = Mathf.Sqrt(-2f * gravity * jumpHeight);
+        if (IsGrounded()) extraJumpsLeft = maxExtraJumps;
+    }
+
+    public void SaveGame() => SC.SaveGame();
+}
+
+[CreateAssetMenu(fileName = "NewJumpAbility", menuName = "Abilities/JumpAbility")]
+public class JumpAbilityData : ScriptableObject
+{
+    public string abilityName;
+    public int additionalJumps;
+    public float heightMultiplier = 1f;
+}
