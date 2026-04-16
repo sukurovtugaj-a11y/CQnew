@@ -106,6 +106,7 @@
     <Compile Include="Assets\Import\Scripts\UI\SaveS\SaveSlot.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PanelDebug.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SlopeSurface.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\CameraOffsetZone.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\BackgroundManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\InteractHintFollower.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Vertical.cs" />

@@ -7,7 +7,7 @@ public class TeleportActivator : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (activateOnEnter && (collision.GetComponent<MainCharacter>() != null || collision.GetComponent<SecMainCharacter>() != null))
+        if (activateOnEnter && (collision.GetComponent<MainCharacter>() != null || collision.GetComponent<SecMainCharacter>() != null || collision.GetComponentInParent<SecMainCharacter>() != null))
         {
             ActivateTeleport();
         }
@@ -15,7 +15,7 @@ public class TeleportActivator : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!activateOnEnter && (collision.GetComponent<MainCharacter>() != null || collision.GetComponent<SecMainCharacter>() != null))
+        if (!activateOnEnter && (collision.GetComponent<MainCharacter>() != null || collision.GetComponent<SecMainCharacter>() != null || collision.GetComponentInParent<SecMainCharacter>() != null))
         {
             ActivateTeleport();
         }
@@ -31,7 +31,7 @@ public class TeleportActivator : MonoBehaviour
                 collider.enabled = true;
             }
             teleportObject.SetActive(true);
-            Debug.Log("[TeleportActivator] Телепорт активирован: " + teleportObject.name);
+            Debug.Log("[TeleportActivator] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " + teleportObject.name);
         }
         Destroy(gameObject);
     }

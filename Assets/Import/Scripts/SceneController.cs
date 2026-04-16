@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
@@ -39,6 +39,12 @@ public class SceneController : MonoBehaviour
                 sec.OnStart(this);
                 if (SpawnPointManager.Instance != null)
                     SpawnPointManager.Instance.ApplySpawnPointToSec(sec);
+                if (SceneManager.GetActiveScene().name != "MainScene")
+                {
+                    var scale = inst.transform.localScale;
+                    scale.x = -Mathf.Abs(scale.x);
+                    inst.transform.localScale = scale;
+                }
             }
             else
             {
@@ -46,6 +52,12 @@ public class SceneController : MonoBehaviour
                 main.OnStart(this);
                 if (SpawnPointManager.Instance != null)
                     SpawnPointManager.Instance.ApplySpawnPoint(main);
+                if (SceneManager.GetActiveScene().name != "MainScene")
+                {
+                    var scale = inst.transform.localScale;
+                    scale.x = -Mathf.Abs(scale.x);
+                    inst.transform.localScale = scale;
+                }
             }
         }
     }
