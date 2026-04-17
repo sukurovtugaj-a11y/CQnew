@@ -15,9 +15,10 @@ public class SceneController : MonoBehaviour
     [Tooltip("Ссылка на объект с PlayerMenuScript для закрытия меню перед переходом")]
     public PlayerMenuScript menuScript;
 
+    private bool isTeleportTransition;
+
     private void Start()
     {
-        // Создаём EventSystem если нет (нужен для работы UI/кнопок)
         EnsureEventSystemExists();
 
         if (settingsCore == null)
@@ -39,11 +40,12 @@ public class SceneController : MonoBehaviour
                 sec.OnStart(this);
                 if (SpawnPointManager.Instance != null)
                     SpawnPointManager.Instance.ApplySpawnPointToSec(sec);
-                if (SceneManager.GetActiveScene().name != "MainScene")
+                if (SpawnPointManager.forceLookRight && SceneManager.GetActiveScene().name != "MainScene")
                 {
                     var scale = inst.transform.localScale;
                     scale.x = -Mathf.Abs(scale.x);
                     inst.transform.localScale = scale;
+                    SpawnPointManager.forceLookRight = false;
                 }
             }
             else
@@ -52,11 +54,11 @@ public class SceneController : MonoBehaviour
                 main.OnStart(this);
                 if (SpawnPointManager.Instance != null)
                     SpawnPointManager.Instance.ApplySpawnPoint(main);
-                if (SceneManager.GetActiveScene().name != "MainScene")
+                if (SpawnPointManager.forceLookRight && SceneManager.GetActiveScene().name != "MainScene")
                 {
-                    var scale = inst.transform.localScale;
-                    scale.x = -Mathf.Abs(scale.x);
-                    inst.transform.localScale = scale;
+                    var sr = main.GetComponent<SpriteRenderer>();
+                    if (sr != null) sr.flipX = false;
+                    SpawnPointManager.forceLookRight = false;
                 }
             }
         }
@@ -92,23 +94,20 @@ public class SceneController : MonoBehaviour
     /// </summary>
     public void LoadScene(string NameScene)
     {
-        // 1. Закрываем меню, если есть ссылка
         if (menuScript != null)
         {
             menuScript.CloseCurrentPanel();
         }
         else
         {
-            // Если ссылки нет — ищем в сцене (запасной вариант)
             var foundMenu = FindObjectOfType<PlayerMenuScript>();
             if (foundMenu != null)
                 foundMenu.CloseCurrentPanel();
         }
 
-        // 2. 🔥 ПРИНУДИТЕЛЬНО восстанавливаем время — гарантируем, что всё заработает
         Time.timeScale = 1f;
 
-        // 3. Загружаем сцену напрямую через Unity (надёжно и быстро)
+        SpawnPointManager.forceLookRight = true;
         SceneManager.LoadScene(NameScene, LoadSceneMode.Single);
     }
 }

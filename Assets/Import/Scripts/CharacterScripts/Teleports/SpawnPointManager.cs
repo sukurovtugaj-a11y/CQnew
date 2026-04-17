@@ -6,6 +6,7 @@ public class SpawnPointManager : MonoBehaviour
     public static SpawnPointManager Instance;
 
     public static int LastHealth = 100;
+    public static bool forceLookRight = false;
 
     [HideInInspector] public Vector3 spawnPosition;
     [HideInInspector] public bool setDirection = false;
