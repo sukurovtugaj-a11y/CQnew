@@ -1,10 +1,14 @@
 # Unity
-/Library/
-/Temp/
-/Obj/
-/Logs/
-/UserSettings/
-/Build/
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Ll]ogs/
+/[Uu]serSettings/
+/[Pp]ackages/
+
+# ProjectSettings (можно коммитить, но многие не коммитят)
+# /ProjectSettings/
 
 # Visual Studio
 .vs/
