@@ -176,6 +176,13 @@ public class PlayerMovementComponent
         if (owner.MenuPanel.activeSelf || Time.timeScale <= 0) return;
         bool isMoving = Mathf.Abs(owner.horizontalInput) > 0.1f;
 
+        if (owner.runAnimation != null)
+        {
+            var anim = owner.runAnimation.GetComponent<Animator>();
+            if (anim != null)
+                anim.speed = isMoving ? (owner.isBoosting ? 1.5f : 1.1f) : 1f;
+        }
+
         if (owner.idleAnimation != null && owner.runAnimation != null && owner.slideSprite != null && !owner.isSliding)
         {
             owner.idleAnimation.SetActive(!isMoving);
