@@ -69,6 +69,7 @@
     <Compile Include="Assets\Import\NAD\Timer.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UIStateManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerCheckpointComponent.cs" />
+    <Compile Include="Assets\Import\Scripts\VideosScripts\VideoController.cs" />
     <Compile Include="Assets\Import\NAD\ScroeController.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\SecMainCharacter.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuOpener.cs" />
