@@ -36,3 +36,6 @@ packages/
 
 # JetBrains Rider
 .idea/
+
+# Видеофайлы - слишком большие для GitHub
+Assets/Import/Videos/*.mp4
