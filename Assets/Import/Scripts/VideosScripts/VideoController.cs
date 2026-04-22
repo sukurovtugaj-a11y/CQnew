@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class VideoController : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    public VideoClip[] videos; // Все 5 видео
+    public VideoClip[] videos;
     public static VideoController Instance;
+
+    public static int videoToPlay = -1;
+    public static bool autoReturn = false;
+    public static string currentLevelForVideo = null;
+    public static bool introJustPlayed = false;
+    public static bool spawnAtIntroZone = false;
 
     void Awake()
     {
@@ -13,7 +20,21 @@ public class VideoController : MonoBehaviour
         videoPlayer.loopPointReached += OnVideoEnded;
     }
 
-    // Метод для запуска конкретного видео
+    void Start()
+    {
+        var rt = new RenderTexture(Screen.width, Screen.height, 24);
+        videoPlayer.targetTexture = rt;
+
+        var rawImage = FindObjectOfType<UnityEngine.UI.RawImage>();
+        if (rawImage != null) rawImage.texture = rt;
+
+        if (videoToPlay >= 0)
+        {
+            PlayVideoByIndex(videoToPlay);
+            videoToPlay = -1;
+        }
+    }
+
     public void PlayVideoByIndex(int index)
     {
         if (index >= 0 && index < videos.Length)
@@ -23,23 +44,22 @@ public class VideoController : MonoBehaviour
         }
     }
 
-    // Для плейлиста (опционально)
-    private int currentIndex = -1;
-
-    public void PlayPlaylistStartingFrom(int startIndex)
-    {
-        currentIndex = startIndex;
-        PlayVideoByIndex(currentIndex);
-    }
-
     void OnVideoEnded(VideoPlayer vp)
     {
-        // Если нужно авто-переключение
-        if (currentIndex >= 0)
+        if (autoReturn)
         {
-            currentIndex++;
-            if (currentIndex < videos.Length)
-                PlayVideoByIndex(currentIndex);
+            bool isIntro = videoPlayer.clip == videos[0];
+            autoReturn = false;
+
+            if (!string.IsNullOrEmpty(currentLevelForVideo))
+            {
+                GameProgressManager.Instance.MarkVideoWatched(currentLevelForVideo);
+                currentLevelForVideo = null;
+            }
+
+            introJustPlayed = isIntro && spawnAtIntroZone;
+            spawnAtIntroZone = false;
+            SceneManager.LoadScene("MainScene");
         }
     }
 }

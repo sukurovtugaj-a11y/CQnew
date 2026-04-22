@@ -310,10 +310,12 @@ MonoBehaviour:
   videoPlayer: {fileID: 591117223}
   videos:
   - {fileID: 32900000, guid: 186d3e13b2fbbe64f982b271ef4fb004, type: 3}
-  - {fileID: 32900000, guid: 3d8ae3da3109f2149b554fede4efde27, type: 3}
   - {fileID: 32900000, guid: 843915cdc4462824c9027cfb89ef8b56, type: 3}
-  - {fileID: 32900000, guid: 3cb2bfff0d802ee4cafe08153f56b1af, type: 3}
   - {fileID: 32900000, guid: 89f0356db9bbc8e45b2bd689a29dc0d0, type: 3}
+  - {fileID: 32900000, guid: 3cb2bfff0d802ee4cafe08153f56b1af, type: 3}
+  - {fileID: 32900000, guid: 3d8ae3da3109f2149b554fede4efde27, type: 3}
+  introSpawnPoint: {fileID: 0}
+  spawnOffset: {x: 0, y: 100, z: 0}
 --- !u!1 &1017704705
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +352,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -820, y: -460}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1017704707
 MonoBehaviour:

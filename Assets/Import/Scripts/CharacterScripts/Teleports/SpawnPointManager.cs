@@ -32,7 +32,7 @@ public class SpawnPointManager : MonoBehaviour
     {
         if (!hasSpawnData) return;
 
-        Debug.Log($"[SpawnPointManager] ????????? ?????: {spawnPosition}, flipX: {!lookRight}");
+        Debug.Log($"[SpawnPointManager] ??????? ?????: {spawnPosition}, flipX: {!lookRight}");
 
         player.transform.position = spawnPosition;
 

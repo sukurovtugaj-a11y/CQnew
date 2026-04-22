@@ -5,6 +5,7 @@ using System.IO;
 public class GameProgressManager : MonoBehaviour
 {
     public static GameProgressManager Instance { get; private set; }
+    public static string lastCompletedLevel;
 
     private string savePath => Application.dataPath + "/Save/slot.json";
     private SlotData data;
@@ -53,6 +54,7 @@ public class GameProgressManager : MonoBehaviour
 
     public void OnLevelComplete(string level)
     {
+        lastCompletedLevel = level;
         switch (level)
         {
             case "TrainL": data.trainCompleted = true; break;
@@ -160,6 +162,28 @@ public class GameProgressManager : MonoBehaviour
             Save();
         }
     }
+
+    // Video: получить индекс видео для уровня
+    public int? GetVideoIndexForLevel(string level)
+    {
+        if (level == "TrainL" && !data.trainVideoWatched) return 1; // PL
+        if (level == "L1" && !data.l1VideoWatched) return 2; // SOS
+        if (level == "L2" && !data.l2VideoWatched) return 3; // TD UP
+        if (level == "L3" && !data.l3VideoWatched) return 4; // OOP
+        return null;
+    }
+
+    public void MarkVideoWatched(string level)
+    {
+        switch (level)
+        {
+            case "TrainL": data.trainVideoWatched = true; break;
+            case "L1": data.l1VideoWatched = true; break;
+            case "L2": data.l2VideoWatched = true; break;
+            case "L3": data.l3VideoWatched = true; break;
+        }
+        Save();
+    }
 }
 
 [System.Serializable]
@@ -173,4 +197,5 @@ public class SlotData
     public string secondLevelUpgrade, secondLevelUpgrade2;
     public string pendingAchievement;
     public List<string> solvedPuzzles = new List<string>();
+    public bool trainVideoWatched, l1VideoWatched, l2VideoWatched, l3VideoWatched;
 }

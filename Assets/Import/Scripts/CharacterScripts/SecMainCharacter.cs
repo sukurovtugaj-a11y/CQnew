@@ -214,6 +214,20 @@ public class SecMainCharacter : MonoBehaviour
 
     private void Start()
     {
+        if (VideoController.introJustPlayed)
+        {
+            VideoController.introJustPlayed = false;
+            VideoController.spawnAtIntroZone = false;
+            var introZone = GameObject.Find("IntroZone");
+            if (introZone != null)
+            {
+                transform.position = introZone.transform.position;
+                controlLockTimer = 2f;
+                var mover = FindObjectOfType<OPollMover>();
+                if (mover != null) mover.StartMoving();
+            }
+        }
+
         if (extraJumpsLeft <= 0 && maxExtraJumps > 0) extraJumpsLeft = maxExtraJumps;
     }
 

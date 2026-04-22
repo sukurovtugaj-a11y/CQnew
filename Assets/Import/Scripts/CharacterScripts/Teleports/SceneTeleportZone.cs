@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -80,14 +80,31 @@ public class SceneTeleportZone : MonoBehaviour
             string currentScene = SceneManager.GetActiveScene().name;
             string level = currentScene switch
             {
+                var s when s.StartsWith("L3") => "L3",
                 var s when s.StartsWith("L1") => "L1",
                 var s when s.StartsWith("L2") => "L2",
-                var s when s.StartsWith("L3") => "L3",
                 var s when s.StartsWith("Train") => "TrainL",
                 _ => null
             };
             if (level != null && GameProgressManager.Instance != null)
+            {
                 GameProgressManager.Instance.OnLevelComplete(level);
+                Debug.Log($"[SceneTeleportZone] Level completed: {level}");
+
+                if (level == "L3")
+                {
+                    int? videoIndex = GameProgressManager.Instance.GetVideoIndexForLevel("L3");
+                    Debug.Log($"[SceneTeleportZone] L3 videoIndex: {videoIndex}");
+                    if (videoIndex.HasValue)
+                    {
+                        VideoController.videoToPlay = videoIndex.Value;
+                        VideoController.autoReturn = true;
+                        VideoController.currentLevelForVideo = "L3";
+                        SceneManager.LoadScene("VideoScene");
+                        return;
+                    }
+                }
+            }
 
             SceneManager.LoadScene("Upgrades");
         }

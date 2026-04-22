@@ -95,6 +95,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\DeathZone.cs" />
     <Compile Include="Assets\Import\Scripts\UI\DeathMenuManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuScript.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\OPollMover.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PuzzlesScripts\PuzzleUI.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Horizontal.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\SaveSlotManager.cs" />

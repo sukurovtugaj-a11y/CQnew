@@ -26,7 +26,7 @@ public class UpgradeManager : MonoBehaviour
 
         if (pendingPanels.Count == 0)
         {
-            SceneManager.LoadScene("MainScene");
+            CheckAndShowVideo();
             return;
         }
 
@@ -34,6 +34,27 @@ public class UpgradeManager : MonoBehaviour
         if (name == "AfterTrain") afterTrainPanel.SetActive(true);
         else if (name == "AfterFirstLevel") afterFirstLevelPanel.SetActive(true);
         else if (name == "AfterSecLevel") afterSecLevelPanel.SetActive(true);
+    }
+
+    void CheckAndShowVideo()
+    {
+        string level = GameProgressManager.lastCompletedLevel;
+        GameProgressManager.lastCompletedLevel = null;
+
+        if (level != null)
+        {
+            int? videoIndex = GameProgressManager.Instance.GetVideoIndexForLevel(level);
+            if (videoIndex.HasValue)
+            {
+                VideoController.videoToPlay = videoIndex.Value;
+                VideoController.autoReturn = true;
+                VideoController.currentLevelForVideo = level;
+                SceneManager.LoadScene("VideoScene");
+                return;
+            }
+        }
+
+        SceneManager.LoadScene("MainScene");
     }
 
     void AfterPick()

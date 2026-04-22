@@ -89,6 +89,21 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 
+    public void PlayVideoIntro() { GoToVideo(0, true); }
+    public void PlayVideoIntroFromPanel() { GoToVideo(0, false); }
+    public void PlayVideoPL() { GoToVideo(1, false); }
+    public void PlayVideoTDUP() { GoToVideo(2, false); }
+    public void PlayVideoSOS() { GoToVideo(3, false); }
+    public void PlayVideoOOP() { GoToVideo(4, false); }
+
+    private void GoToVideo(int index, bool spawnAtIntro)
+    {
+        VideoController.videoToPlay = index;
+        VideoController.autoReturn = true;
+        VideoController.spawnAtIntroZone = spawnAtIntro;
+        LoadScene("VideoScene");
+    }
+
     /// <summary>
     /// 🔥 ЗАГРУЗКА СЦЕНЫ — работает даже если меню открыто и timeScale = 0
     /// </summary>
