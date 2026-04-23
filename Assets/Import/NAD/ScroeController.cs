@@ -30,7 +30,7 @@ public class ScroeController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<MainCharacter>() != null || other.GetComponent<SecMainCharacter>() != null)
+        if (other.GetComponent<SecMainCharacter>() != null)
         {
             ImageSpritePoint.enabled = false;
             PS.Play();

@@ -1,13 +1,13 @@
 {
     "slotName": "КрутойУЛЬТРАнеВвёлИмя",
     "gameStarted": true,
-    "trainCompleted": false,
-    "l1Completed": false,
+    "trainCompleted": true,
+    "l1Completed": true,
     "l2Completed": false,
-    "l3Completed": true,
-    "trainUpgrade": "",
+    "l3Completed": false,
+    "trainUpgrade": "health",
     "trainUpgrade2": "",
-    "firstLevelUpgrade": "",
+    "firstLevelUpgrade": "doubleJump",
     "firstLevelUpgrade2": "",
     "secondLevelUpgrade": "",
     "secondLevelUpgrade2": "",
@@ -15,8 +15,8 @@
     "solvedPuzzles": [
         "Train_01"
     ],
-    "trainVideoWatched": false,
-    "l1VideoWatched": false,
+    "trainVideoWatched": true,
+    "l1VideoWatched": true,
     "l2VideoWatched": false,
-    "l3VideoWatched": true
+    "l3VideoWatched": false
 }

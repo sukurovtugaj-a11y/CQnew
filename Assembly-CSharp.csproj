@@ -58,11 +58,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.2.21f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Import\Scripts\UI\VideoButtonLocker.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\SceneTeleportZone.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerInvulnerabilityComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\CameraController.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\PlayerInteraction.cs" />
-    <Compile Include="Assets\Import\Scripts\CharacterScripts\MainCharacter.cs" />
+    <Compile Include="Assets\Import\Scripts\CharacterScripts\JumpAbilityData.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerHealthComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSlideComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SideLauncher.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Assets\Import\Scripts\UI\MenuOpener.cs" />
     <Compile Include="Assets\Import\Scripts\UI\CursorManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MyButton.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\PortalTrainGate.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\NoSlideZone.cs" />
     <Compile Include="Assets\Import\Scripts\Enemies\AIcontroller.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\CarTrigger.cs" />

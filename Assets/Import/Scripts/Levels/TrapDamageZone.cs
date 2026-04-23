@@ -24,15 +24,11 @@ public class TrapDamageZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var player = collision.GetComponent<MainCharacter>() ?? collision.GetComponent<SecMainCharacter>() as MonoBehaviour;
+        var secChar = collision.GetComponent<SecMainCharacter>();
+        var player = secChar as MonoBehaviour;
         if (player != null)
         {
-            // Check invulnerability
-            bool isInvuln = false;
-            var mainChar = collision.GetComponent<MainCharacter>();
-            if (mainChar != null) isInvuln = mainChar.IsInvulnerable();
-            var secChar = collision.GetComponent<SecMainCharacter>();
-            if (secChar != null) isInvuln = secChar.IsInvulnerable();
+            bool isInvuln = secChar.IsInvulnerable();
 
             if (oneTimeDamage && hasDamaged) return;
 
@@ -43,18 +39,13 @@ public class TrapDamageZone : MonoBehaviour
                     player.transform.position = respawnPoint.position;
                     var rb = player.GetComponent<Rigidbody2D>();
                     if (rb != null) rb.velocity = Vector2.zero;
-
-                    // ← Блокируем управление
-                    if (secChar != null) secChar.LockControls(controlLockDuration);
+                    secChar.LockControls(controlLockDuration);
                 }
             }
             else
             {
-                if (secChar != null)
-                {
-                    secChar.Damage(damage, respawnPoint);
-                    secChar.LockControls(controlLockDuration); // ← блокировка для SecMainCharacter
-                }
+                secChar.Damage(damage, respawnPoint);
+                secChar.LockControls(controlLockDuration);
             }
 
             hasDamaged = true;
@@ -63,7 +54,7 @@ public class TrapDamageZone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<MainCharacter>() != null || collision.GetComponent<SecMainCharacter>() != null)
+        if (collision.GetComponent<SecMainCharacter>() != null)
         {
             hasDamaged = false;
         }

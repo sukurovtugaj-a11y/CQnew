@@ -234,16 +234,20 @@ public class SecMainCharacter : MonoBehaviour
     private void Update()
     {
         if (controlLockTimer > 0f) controlLockTimer -= Time.deltaTime;
-        if (!MenuPanel.activeSelf && Time.timeScale > 0)
+        
+        if (controlLockTimer > 0f) return;
+        if (Time.timeScale <= 0f) return;
+        
+        if (!MenuPanel.activeSelf)
         {
             movement.UpdateInput();
             jump.UpdateInput();
-            if (controlLockTimer <= 0f && !isSliding && CanSlide && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown))
+            if (!isSliding && CanSlide && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown))
             {
                 slide.StartSlide("Normal", normalSlideDuration, Vector2.zero);
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) misc.ToggleMenu();
+        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale > 0) misc.ToggleMenu();
         if (Input.GetKeyDown(KeyCode.W)) dash.TryDashOrTeleport();
         if (Input.GetKeyDown(KeyCode.F5)) checkpoint.TrySetCheckpoint();
         invuln.UpdateInput();
@@ -255,6 +259,7 @@ public class SecMainCharacter : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (controlLockTimer > 0f) return;
         if (MenuPanel.activeSelf || Time.timeScale <= 0) return;
         if (noSlideCooldown > 0) noSlideCooldown -= Time.fixedDeltaTime;
         if (isSliding) { slide.HandleSlide(); return; }
@@ -263,6 +268,9 @@ public class SecMainCharacter : MonoBehaviour
     }
 
     // === Wrappers for external scripts ===
+    public void Die() => health.Die();
+    public void RespawnImmediately() => health.RespawnAtCheckpoint();
+
     public void Damage(float dam, Transform respawnPoint = null) => health.Damage(dam, respawnPoint);
     public void ResetAfterRespawn() => health.ResetAfterRespawn();
 

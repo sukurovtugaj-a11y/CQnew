@@ -28,7 +28,7 @@ public class PlayerHealthComponent
 
     public bool IsInvulnerable() => owner.isInvulnerable;
 
-    private void Die()
+    public void Die()
     {
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
@@ -40,6 +40,11 @@ public class PlayerHealthComponent
             owner.playerMenuScript.ShowDeathPanel();
         else
             Debug.LogError("[SecMainCharacter] playerMenuScript не назначен!");
+    }
+
+    public void RespawnAtCheckpoint()
+    {
+        TryCheckpointRespawn();
     }
 
     private bool TryCheckpointRespawn()

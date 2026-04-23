@@ -22,7 +22,8 @@ public class TeleportZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var player = collision.GetComponent<MainCharacter>() as MonoBehaviour ?? collision.GetComponent<SecMainCharacter>();
+        var secChar = collision.GetComponent<SecMainCharacter>();
+        var player = secChar as MonoBehaviour;
         if (player != null && teleportTarget != null)
         {
             // Телепортируем игрока
@@ -33,7 +34,6 @@ public class TeleportZone : MonoBehaviour
             if (rb != null) rb.velocity = Vector2.zero;
 
             // ← Блокируем управление
-            var secChar = player.GetComponent<SecMainCharacter>();
             if (secChar != null) secChar.LockControls(controlLockDuration);
 
             // Разворачиваем игрока при необходимости 195100огромный

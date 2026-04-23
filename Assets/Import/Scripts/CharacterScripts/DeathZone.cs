@@ -6,7 +6,8 @@ public class DeathZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //MainCharacter.Instance.Die();
+            var player = other.GetComponent<SecMainCharacter>();
+            if (player != null) player.Die();
         }
     }
 }

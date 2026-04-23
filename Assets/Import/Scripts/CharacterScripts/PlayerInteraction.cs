@@ -29,6 +29,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale <= 0f) return;
+        
         if (menuScript != null && menuScript.IsAnyMenuOpen)
             return;
 
@@ -80,4 +82,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact() => currentInteractable?.Do();
     public InterativeController GetCurrentInteractable() => currentInteractable;
+
+    public void ResetInteraction()
+    {
+        currentInteractable = null;
+        if (interactIcon != null) interactIcon.SetActive(false);
+        isCustomCursorActive = false;
+    }
 }

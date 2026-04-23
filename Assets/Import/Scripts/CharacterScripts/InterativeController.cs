@@ -29,5 +29,8 @@ public class InterativeController : MonoBehaviour
         collision.GetComponent<PlayerInteraction>()?.HideInteractIcon();
     }
 
-    public void Do() => e_onDO.Invoke();
+    public void Do()
+    {
+        e_onDO.Invoke();
+    }
 }

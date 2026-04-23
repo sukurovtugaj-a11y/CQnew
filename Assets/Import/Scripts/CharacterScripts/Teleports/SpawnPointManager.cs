@@ -28,25 +28,6 @@ public class SpawnPointManager : MonoBehaviour
         }
     }
 
-    public void ApplySpawnPoint(MainCharacter player)
-    {
-        if (!hasSpawnData) return;
-
-        Debug.Log($"[SpawnPointManager] ??????? ?????: {spawnPosition}, flipX: {!lookRight}");
-
-        player.transform.position = spawnPosition;
-
-        if (setDirection)
-        {
-            var spriteRenderer = player.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null) spriteRenderer.flipX = !lookRight;
-        }
-
-        hasSpawnData = false;
-        spawnPosition = Vector3.zero;
-        setDirection = false;
-    }
-
     public void ApplySpawnPointToSec(SecMainCharacter player)
     {
         if (!hasSpawnData) return;

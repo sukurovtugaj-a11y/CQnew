@@ -61,7 +61,7 @@ public class AIcontroller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var player = collision.GetComponent<MainCharacter>() ?? collision.GetComponent<SecMainCharacter>() as MonoBehaviour;
+        var player = collision.GetComponent<SecMainCharacter>();
         if (player != null)
         {
             Target = player;
@@ -70,7 +70,7 @@ public class AIcontroller : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        var player = collision.GetComponent<MainCharacter>() ?? collision.GetComponent<SecMainCharacter>() as MonoBehaviour;
+        var player = collision.GetComponent<SecMainCharacter>();
         if (player != null)
         {
             Target = null;
@@ -80,7 +80,7 @@ public class AIcontroller : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<MainCharacter>() != null || collision.gameObject.GetComponent<SecMainCharacter>() != null)
+        if (collision.gameObject.GetComponent<SecMainCharacter>() != null)
         {
             OnHit.Invoke();
         }
@@ -91,11 +91,11 @@ public class AIcontroller : MonoBehaviour
         if (index >= 0 && index < weaponList.Count)
         {
             CurrentWeaponItem = index;
-            Debug.Log($"[{name}] Оружие сменено на: {weaponList[index].NameWeapon}");
+            Debug.Log($"[{name}] пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ: {weaponList[index].NameWeapon}");
         }
         else
         {
-            Debug.LogWarning($"[{name}] Неверный индекс оружия: {index}");
+            Debug.LogWarning($"[{name}] пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: {index}");
         }
     }
 

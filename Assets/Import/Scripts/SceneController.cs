@@ -48,19 +48,6 @@ public class SceneController : MonoBehaviour
                     SpawnPointManager.forceLookRight = false;
                 }
             }
-            else
-            {
-                var main = inst.GetComponent<MainCharacter>();
-                main.OnStart(this);
-                if (SpawnPointManager.Instance != null)
-                    SpawnPointManager.Instance.ApplySpawnPoint(main);
-                if (SpawnPointManager.forceLookRight && SceneManager.GetActiveScene().name != "MainScene")
-                {
-                    var sr = main.GetComponent<SpriteRenderer>();
-                    if (sr != null) sr.flipX = false;
-                    SpawnPointManager.forceLookRight = false;
-                }
-            }
         }
     }
 

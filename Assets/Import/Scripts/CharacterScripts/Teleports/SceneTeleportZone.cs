@@ -37,13 +37,12 @@ public class SceneTeleportZone : MonoBehaviour
             return;
         }
 
-        var mainChar = collision.GetComponent<MainCharacter>();
         var secChar = collision.GetComponent<SecMainCharacter>();
-        MonoBehaviour player = mainChar != null ? mainChar : secChar;
+        MonoBehaviour player = secChar;
 
         if (player != null && !string.IsNullOrEmpty(sceneName))
         {
-            int health = mainChar != null ? mainChar.currentHealth : secChar.currentHealth;
+            int health = secChar.currentHealth;
             HandleTeleport(secChar, health);
         }
     }

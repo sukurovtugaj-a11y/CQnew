@@ -19,6 +19,9 @@ public class MyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private Vector3 targetSize;
 
     private Image MineUI;
+    private Sprite defaultSprite;
+    private Sprite lockedSprite;
+    private bool isLocked;
 
     [Serializable]
     public class ButtonClickedEvent : UnityEvent { }
@@ -60,7 +63,28 @@ public class MyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        m_OnClick.Invoke();
+        if (!isLocked) m_OnClick.Invoke();
+    }
+
+    public void Lock()
+    {
+        isLocked = true;
+    }
+
+    public void Unlock()
+    {
+        isLocked = false;
+        GetComponent<Image>().raycastTarget = true;
+        if (defaultSprite != null)
+            GetComponent<Image>().sprite = defaultSprite;
+    }
+
+    public void SetLockedSprite(Sprite sprite)
+    {
+        if (GetComponent<Image>().sprite != lockedSprite)
+            defaultSprite = GetComponent<Image>().sprite;
+        lockedSprite = sprite;
+        GetComponent<Image>().sprite = sprite;
     }
 
     private void Update()

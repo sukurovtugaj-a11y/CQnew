@@ -78,15 +78,16 @@ public class DeathMenuManager : MonoBehaviour
     {
         Debug.Log("[DeathMenu] Respawn() вызван");
 
-        //if (MainCharacter.Instance == null)
+        var player = FindObjectOfType<SecMainCharacter>();
+        if (player == null)
         {
-            Debug.LogError("[DeathMenu] MainCharacter.Instance == null!");
+            Debug.LogError("[DeathMenu] SecMainCharacter не найден!");
             ReturnToMainMenu();
             return;
         }
 
         Time.timeScale = 1f;
-        //MainCharacter.Instance.RespawnImmediately();
+        player.RespawnImmediately();
         Hide();
 
         Debug.Log($"[DeathMenu] Респаун завершён");
