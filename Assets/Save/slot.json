@@ -1,22 +1,18 @@
 {
-    "slotName": "КрутойУЛЬТРАнеВвёлИмя",
+    "slotName": "195100",
     "gameStarted": true,
     "trainCompleted": true,
     "l1Completed": true,
-    "l2Completed": false,
+    "l2Completed": true,
     "l3Completed": false,
     "trainUpgrade": "health",
-    "trainUpgrade2": "",
+    "trainUpgrade2": "upDamage",
     "firstLevelUpgrade": "doubleJump",
-    "firstLevelUpgrade2": "",
-    "secondLevelUpgrade": "",
-    "secondLevelUpgrade2": "",
+    "firstLevelUpgrade2": "dash",
+    "secondLevelUpgrade": "checkpoint",
+    "secondLevelUpgrade2": "invincible",
     "pendingAchievement": "",
     "solvedPuzzles": [
         "Train_01"
-    ],
-    "trainVideoWatched": true,
-    "l1VideoWatched": true,
-    "l2VideoWatched": false,
-    "l3VideoWatched": false
+    ]
 }
