@@ -1,0 +1,20 @@
+{
+    "slotName": "КрутойУЛЬТРАнеВвёлИмя",
+    "gameStarted": true,
+    "trainCompleted": true,
+    "l1Completed": false,
+    "l2Completed": false,
+    "l3Completed": false,
+    "trainUpgrade": "health",
+    "trainUpgrade2": "",
+    "firstLevelUpgrade": "",
+    "firstLevelUpgrade2": "",
+    "secondLevelUpgrade": "",
+    "secondLevelUpgrade2": "",
+    "pendingAchievement": "",
+    "solvedPuzzles": [],
+    "trainVideoWatched": true,
+    "l1VideoWatched": false,
+    "l2VideoWatched": false,
+    "l3VideoWatched": false
+}

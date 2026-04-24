@@ -314,8 +314,7 @@ MonoBehaviour:
   - {fileID: 32900000, guid: 89f0356db9bbc8e45b2bd689a29dc0d0, type: 3}
   - {fileID: 32900000, guid: 3cb2bfff0d802ee4cafe08153f56b1af, type: 3}
   - {fileID: 32900000, guid: 3d8ae3da3109f2149b554fede4efde27, type: 3}
-  introSpawnPoint: {fileID: 0}
-  spawnOffset: {x: 0, y: 100, z: 0}
+  - {fileID: 32900000, guid: 992760d971bd2d0438986aaa3648aa50, type: 3}
 --- !u!1 &1017704705
 GameObject:
   m_ObjectHideFlags: 0
