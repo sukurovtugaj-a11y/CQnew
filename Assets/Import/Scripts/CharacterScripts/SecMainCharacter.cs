@@ -234,20 +234,16 @@ public class SecMainCharacter : MonoBehaviour
     private void Update()
     {
         if (controlLockTimer > 0f) controlLockTimer -= Time.deltaTime;
-        
-        if (controlLockTimer > 0f) return;
-        if (Time.timeScale <= 0f) return;
-        
-        if (!MenuPanel.activeSelf)
+        if (!MenuPanel.activeSelf && Time.timeScale > 0)
         {
             movement.UpdateInput();
             jump.UpdateInput();
-            if (!isSliding && CanSlide && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown))
+            if (controlLockTimer <= 0f && !isSliding && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown))
             {
                 slide.StartSlide("Normal", normalSlideDuration, Vector2.zero);
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale > 0) misc.ToggleMenu();
+        if (Input.GetKeyDown(KeyCode.Escape)) misc.ToggleMenu();
         if (Input.GetKeyDown(KeyCode.W)) dash.TryDashOrTeleport();
         if (Input.GetKeyDown(KeyCode.F5)) checkpoint.TrySetCheckpoint();
         invuln.UpdateInput();
@@ -259,9 +255,7 @@ public class SecMainCharacter : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (controlLockTimer > 0f) return;
         if (MenuPanel.activeSelf || Time.timeScale <= 0) return;
-        if (noSlideCooldown > 0) noSlideCooldown -= Time.fixedDeltaTime;
         if (isSliding) { slide.HandleSlide(); return; }
         movement.FixedUpdate();
         jump.HandleJumpRequests();

@@ -99,7 +99,6 @@ public class PlayerSlideComponent
         }
 
         owner.playerCollider.enabled = true;
-        owner.currentSlideZone = null;
         UpdateSlideSprite(false);
         if (owner.slideSprite != null) owner.slideSprite.transform.localPosition = Vector3.zero;
         owner.slideSpeed = owner.savedSlideSpeed;
@@ -122,8 +121,11 @@ public class PlayerSlideComponent
 
     public void ExitSlideZone(SlideZone zone)
     {
-        if (owner.currentSlideZone != zone) return;
-        owner.currentSlideZone = null;
+        if (owner.currentSlideZone == zone)
+        {
+            owner.currentSlideZone = null;
+            if (owner.isSliding && owner.slideType == "Special") StopSlide();
+        }
     }
 
     private bool IsGrounded() => rb.GetContacts(owner.groundFilter, owner.groundContacts) > 0;
@@ -140,9 +142,12 @@ public class PlayerSlideComponent
 
     public IEnumerator HandleSlideInput()
     {
-        if (!owner.isSliding && owner.CanSlide && IsGrounded() && Input.GetKeyDown(owner.keys.MoveDown))
+        if (!owner.isSliding && IsGrounded() && Input.GetKeyDown(owner.keys.MoveDown))
         {
-            StartSlide("Normal", owner.normalSlideDuration, Vector2.zero);
+            if (owner.currentSlideZone != null)
+                StartSlide("Special", 0, Vector2.zero);
+            else
+                StartSlide("Normal", owner.normalSlideDuration, Vector2.zero);
         }
         yield return null;
     }

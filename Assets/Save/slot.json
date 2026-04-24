@@ -3,13 +3,13 @@
     "gameStarted": true,
     "trainCompleted": true,
     "l1Completed": true,
-    "l2Completed": false,
+    "l2Completed": true,
     "l3Completed": false,
     "trainUpgrade": "health",
-    "trainUpgrade2": "",
+    "trainUpgrade2": "upDamage",
     "firstLevelUpgrade": "doubleJump",
     "firstLevelUpgrade2": "",
-    "secondLevelUpgrade": "",
+    "secondLevelUpgrade": "checkpoint",
     "secondLevelUpgrade2": "",
     "pendingAchievement": "",
     "solvedPuzzles": [
@@ -17,6 +17,6 @@
     ],
     "trainVideoWatched": true,
     "l1VideoWatched": true,
-    "l2VideoWatched": false,
+    "l2VideoWatched": true,
     "l3VideoWatched": false
 }
