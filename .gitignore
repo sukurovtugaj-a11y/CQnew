@@ -39,3 +39,10 @@ packages/
 
 # Видеофайлы - слишком большие для GitHub
 Assets/Import/Videos/*.mp4
+
+# Saves
+Assets/Save/slot.json
+
+# Temp files
+nul
+CQ/
