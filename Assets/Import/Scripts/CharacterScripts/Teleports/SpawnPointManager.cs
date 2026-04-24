@@ -28,6 +28,8 @@ public class SpawnPointManager : MonoBehaviour
         }
     }
 
+}
+
     public void ApplySpawnPointToSec(SecMainCharacter player)
     {
         if (!hasSpawnData) return;
