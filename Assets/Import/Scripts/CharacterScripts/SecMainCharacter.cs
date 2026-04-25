@@ -228,6 +228,18 @@ public class SecMainCharacter : MonoBehaviour
             }
         }
 
+        if (VideoController.wokyJustPlayed)
+        {
+            VideoController.wokyJustPlayed = false;
+            VideoController.spawnAtWokyZone = false;
+            var wokyZone = GameObject.Find("WokyZone");
+            if (wokyZone != null)
+            {
+                transform.position = wokyZone.transform.position;
+                controlLockTimer = 2f;
+            }
+        }
+
         if (extraJumpsLeft <= 0 && maxExtraJumps > 0) extraJumpsLeft = maxExtraJumps;
     }
 

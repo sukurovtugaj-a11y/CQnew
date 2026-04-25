@@ -13,6 +13,8 @@ public class VideoController : MonoBehaviour
     public static string currentLevelForVideo = null;
     public static bool introJustPlayed = false;
     public static bool spawnAtIntroZone = false;
+    public static bool wokyJustPlayed = false;
+    public static bool spawnAtWokyZone = false;
 
     void Awake()
     {
@@ -48,7 +50,7 @@ public class VideoController : MonoBehaviour
     {
         if (autoReturn)
         {
-            bool isIntro = videoPlayer.clip == videos[0];
+            bool isWoky = videoPlayer.clip == videos[5];
             autoReturn = false;
 
             if (!string.IsNullOrEmpty(currentLevelForVideo))
@@ -57,8 +59,11 @@ public class VideoController : MonoBehaviour
                 currentLevelForVideo = null;
             }
 
-            introJustPlayed = isIntro && spawnAtIntroZone;
+            introJustPlayed = !isWoky && spawnAtIntroZone;
+            wokyJustPlayed = isWoky && spawnAtWokyZone;
             spawnAtIntroZone = false;
+            spawnAtWokyZone = false;
+
             SceneManager.LoadScene("MainScene");
         }
     }

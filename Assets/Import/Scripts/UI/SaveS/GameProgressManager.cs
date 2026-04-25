@@ -166,10 +166,11 @@ public class GameProgressManager : MonoBehaviour
     // Video: получить индекс видео для уровня
     public int? GetVideoIndexForLevel(string level)
     {
-        if (level == "TrainL" && !data.trainVideoWatched) return 1; // PL
-        if (level == "L1" && !data.l1VideoWatched) return 2; // SOS
-        if (level == "L2" && !data.l2VideoWatched) return 3; // TD UP
-        if (level == "L3" && !data.l3VideoWatched) return 4; // OOP
+        if (level == "Intro" && !data.introVideoWatched) return 5;
+        if (level == "TrainL" && !data.trainVideoWatched) return 1;
+        if (level == "L1" && !data.l1VideoWatched) return 2;
+        if (level == "L2" && !data.l2VideoWatched) return 3;
+        if (level == "L3" && !data.l3VideoWatched) return 4;
         return null;
     }
 
@@ -177,6 +178,8 @@ public class GameProgressManager : MonoBehaviour
     {
         switch (level)
         {
+            case "Woky": data.introVideoWatched = false; break;
+            case "Intro": data.introVideoWatched = true; break;
             case "TrainL": data.trainVideoWatched = true; break;
             case "L1": data.l1VideoWatched = true; break;
             case "L2": data.l2VideoWatched = true; break;
@@ -184,6 +187,8 @@ public class GameProgressManager : MonoBehaviour
         }
         Save();
     }
+
+    public bool IsIntroWatched() => data.introVideoWatched;
 }
 
 [System.Serializable]
@@ -197,5 +202,5 @@ public class SlotData
     public string secondLevelUpgrade, secondLevelUpgrade2;
     public string pendingAchievement;
     public List<string> solvedPuzzles = new List<string>();
-    public bool trainVideoWatched, l1VideoWatched, l2VideoWatched, l3VideoWatched;
+    public bool trainVideoWatched, l1VideoWatched, l2VideoWatched, l3VideoWatched, introVideoWatched;
 }

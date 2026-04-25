@@ -76,6 +76,22 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 
+    public void StartGameCheckVideo()
+    {
+        if (GameProgressManager.Instance != null && !GameProgressManager.Instance.IsIntroWatched())
+        {
+            VideoController.videoToPlay = 5;
+            VideoController.autoReturn = true;
+            VideoController.spawnAtWokyZone = true;
+            VideoController.currentLevelForVideo = "Woky";
+            LoadScene("VideoScene");
+        }
+        else
+        {
+            LoadScene("MainScene");
+        }
+    }
+
     public void PlayVideoIntro() { GoToVideo(0, true); }
     public void PlayVideoIntroFromPanel() { GoToVideo(0, false); }
     public void PlayVideoPL() { GoToVideo(1, false); }
