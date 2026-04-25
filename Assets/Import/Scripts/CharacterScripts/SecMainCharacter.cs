@@ -221,6 +221,9 @@ public class SecMainCharacter : MonoBehaviour
 
     private void Start()
     {
+        var signal = FindObjectOfType<WokySignalLight>();
+        bool introWatched = GameProgressManager.Instance != null && GameProgressManager.Instance.IsIntroWatched();
+
         if (VideoController.introJustPlayed)
         {
             VideoController.introJustPlayed = false;
@@ -232,7 +235,18 @@ public class SecMainCharacter : MonoBehaviour
                 controlLockTimer = 2f;
                 var mover = FindObjectOfType<OPollMover>();
                 if (mover != null) mover.StartMoving();
-                var signal = FindObjectOfType<WokySignalLight>();
+            }
+            
+            if (signal != null) signal.StopSignal();
+        }
+        else
+        {
+            if (!introWatched)
+            {
+                if (signal != null) signal.StartSignal();
+            }
+            else
+            {
                 if (signal != null) signal.StopSignal();
             }
         }
@@ -249,9 +263,9 @@ public class SecMainCharacter : MonoBehaviour
                 var scale = transform.localScale;
                 scale.x = -Mathf.Abs(scale.x);
                 transform.localScale = scale;
-                var signal = FindObjectOfType<WokySignalLight>();
-                if (signal != null) signal.StartSignal();
             }
+            
+            if (signal != null) signal.StartSignal();
         }
 
         if (extraJumpsLeft <= 0 && maxExtraJumps > 0) extraJumpsLeft = maxExtraJumps;

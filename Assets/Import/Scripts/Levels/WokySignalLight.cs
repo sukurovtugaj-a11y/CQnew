@@ -14,18 +14,12 @@ public class WokySignalLight : MonoBehaviour
     private float defaultRadius;
     private bool isBlinking = false;
 
-    void Start()
+void Start()
     {
         if (targetLight != null)
             defaultRadius = targetLight.pointLightOuterRadius;
-
-        // Если INTRO уже смотрели - отключить сигнал
-        if (PlayerPrefs.GetInt("IntroWatched", 0) == 1)
-        {
-            if (audioSource != null) audioSource.enabled = false;
-            if (targetLight != null) targetLight.enabled = false;
-            isBlinking = false;
-        }
+        
+        isBlinking = false;
     }
 
     void Update()
