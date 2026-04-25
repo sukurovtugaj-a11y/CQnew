@@ -232,6 +232,8 @@ public class SecMainCharacter : MonoBehaviour
                 controlLockTimer = 2f;
                 var mover = FindObjectOfType<OPollMover>();
                 if (mover != null) mover.StartMoving();
+                var signal = FindObjectOfType<WokySignalLight>();
+                if (signal != null) signal.StopSignal();
             }
         }
 

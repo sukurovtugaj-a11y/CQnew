@@ -19,13 +19,6 @@ public class WokySignalLight : MonoBehaviour
         if (targetLight != null)
             defaultRadius = targetLight.pointLightOuterRadius;
 
-        // Если это WOKY спаун - разрешаем сигнал, игнорируем IntroWatched
-        if (VideoController.wokyJustPlayed)
-        {
-            VideoController.wokyJustPlayed = false;
-            return;
-        }
-
         // Если INTRO уже смотрели - отключить сигнал
         if (PlayerPrefs.GetInt("IntroWatched", 0) == 1)
         {
