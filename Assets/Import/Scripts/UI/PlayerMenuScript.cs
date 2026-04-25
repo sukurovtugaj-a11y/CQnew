@@ -53,6 +53,7 @@ public class PlayerMenuScript : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 0;
+            AudioListener.pause = true;
             Cursor.visible = true;
             ApplyCustomCursor(true);
             if (currentOtherPanel != null)
@@ -62,6 +63,7 @@ public class PlayerMenuScript : MonoBehaviour
         else
         {
             Time.timeScale = 1;
+            AudioListener.pause = false;
             Cursor.visible = false;
             ApplyCustomCursor(false);
         }
@@ -96,6 +98,7 @@ public class PlayerMenuScript : MonoBehaviour
         }
 
         Time.timeScale = 0f;
+        AudioListener.pause = true;
         Cursor.visible = true;
         ApplyCustomCursor(true);
 
@@ -198,6 +201,7 @@ public class PlayerMenuScript : MonoBehaviour
         isPaused = false;
         MenuPanel.SetActive(false);
         Time.timeScale = 1;
+        AudioListener.pause = false;
         Cursor.visible = false;
         ApplyCustomCursor(false);
 

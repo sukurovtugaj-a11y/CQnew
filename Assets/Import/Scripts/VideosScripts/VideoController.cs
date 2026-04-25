@@ -51,6 +51,7 @@ public class VideoController : MonoBehaviour
         if (autoReturn)
         {
             bool isWoky = videoPlayer.clip == videos[5];
+            string levelForSignal = currentLevelForVideo;
             autoReturn = false;
 
             if (!string.IsNullOrEmpty(currentLevelForVideo))
@@ -63,6 +64,15 @@ public class VideoController : MonoBehaviour
             wokyJustPlayed = isWoky && spawnAtWokyZone;
             spawnAtIntroZone = false;
             spawnAtWokyZone = false;
+
+if (introJustPlayed)
+            {
+                PlayerPrefs.SetInt("IntroWatched", 1);
+                PlayerPrefs.Save();
+            }
+
+            Time.timeScale = 1;
+            AudioListener.pause = false;
 
             SceneManager.LoadScene("MainScene");
         }

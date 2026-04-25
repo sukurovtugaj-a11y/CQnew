@@ -142,6 +142,13 @@ public class SecMainCharacter : MonoBehaviour
 
     private void Awake()
     {
+        var listeners = FindObjectsOfType<AudioListener>(true);
+        for (int i = 1; i < listeners.Length; i++)
+        {
+            if (listeners[i].gameObject != gameObject)
+                Destroy(listeners[i].gameObject);
+        }
+
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
@@ -237,6 +244,11 @@ public class SecMainCharacter : MonoBehaviour
             {
                 transform.position = wokyZone.transform.position;
                 controlLockTimer = 2f;
+                var scale = transform.localScale;
+                scale.x = -Mathf.Abs(scale.x);
+                transform.localScale = scale;
+                var signal = FindObjectOfType<WokySignalLight>();
+                if (signal != null) signal.StartSignal();
             }
         }
 

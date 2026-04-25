@@ -3458,6 +3458,7 @@ GameObject:
   - component: {fileID: 8100027500345249636}
   - component: {fileID: 3653502291918698083}
   - component: {fileID: 5864816203829766623}
+  - component: {fileID: 7794279696094145603}
   m_Layer: 0
   m_Name: Human
   m_TagString: Untagged
@@ -3644,6 +3645,14 @@ MonoBehaviour:
   menuScript: {fileID: 3653502291918698083}
   defaultCursorTexture: {fileID: 2800000, guid: b6a578cbdc1a2ae409913b0e1acc7003, type: 3}
   cursorHotspot: {x: 0, y: 0}
+--- !u!81 &7794279696094145603
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880914315446776174}
+  m_Enabled: 1
 --- !u!1 &7927991528881081505
 GameObject:
   m_ObjectHideFlags: 0

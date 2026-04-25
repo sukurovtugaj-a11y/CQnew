@@ -68,6 +68,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSlideComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SideLauncher.cs" />
     <Compile Include="Assets\Import\NAD\Timer.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\WokySignalLight.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UIStateManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerCheckpointComponent.cs" />
     <Compile Include="Assets\Import\Scripts\VideosScripts\VideoController.cs" />

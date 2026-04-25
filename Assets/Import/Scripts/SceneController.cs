@@ -104,6 +104,7 @@ public class SceneController : MonoBehaviour
         VideoController.videoToPlay = index;
         VideoController.autoReturn = true;
         VideoController.spawnAtIntroZone = spawnAtIntro;
+        VideoController.currentLevelForVideo = index == 0 ? "Intro" : null;
         LoadScene("VideoScene");
     }
 
