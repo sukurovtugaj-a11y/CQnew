@@ -125,6 +125,7 @@ public class SceneController : MonoBehaviour
         }
 
         Time.timeScale = 1f;
+        AudioListener.pause = false;
 
         SpawnPointManager.forceLookRight = true;
         SceneManager.LoadScene(NameScene, LoadSceneMode.Single);
