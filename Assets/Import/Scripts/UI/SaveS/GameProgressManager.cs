@@ -48,6 +48,7 @@ public class GameProgressManager : MonoBehaviour
             "L1" => data.l1Completed,
             "L2" => data.l2Completed,
             "L3" => data.l3Completed,
+            "DreamRunning" => data.dreamCompleted,
             _ => false
         };
     }
@@ -61,6 +62,7 @@ public class GameProgressManager : MonoBehaviour
             case "L1": data.l1Completed = true; break;
             case "L2": data.l2Completed = true; break;
             case "L3": data.l3Completed = true; break;
+            case "DreamRunning": data.dreamCompleted = true; break;
         }
 
         // Повторное прохождение: если первый выбор уже есть — выдаём второй
@@ -167,6 +169,7 @@ public class GameProgressManager : MonoBehaviour
     public int? GetVideoIndexForLevel(string level)
     {
         if (level == "Intro" && !data.introVideoWatched) return 5;
+        if (level == "UDontDrUCrIt" && !data.uDontDrUCrItVideoWatched) return 6;
         if (level == "TrainL" && !data.trainVideoWatched) return 1;
         if (level == "L1" && !data.l1VideoWatched) return 2;
         if (level == "L2" && !data.l2VideoWatched) return 3;
@@ -180,6 +183,7 @@ public class GameProgressManager : MonoBehaviour
         {
             case "Woky": data.introVideoWatched = false; break;
             case "Intro": data.introVideoWatched = true; break;
+            case "UDontDrUCrIt": data.uDontDrUCrItVideoWatched = true; break;
             case "TrainL": data.trainVideoWatched = true; break;
             case "L1": data.l1VideoWatched = true; break;
             case "L2": data.l2VideoWatched = true; break;
@@ -189,6 +193,14 @@ public class GameProgressManager : MonoBehaviour
     }
 
     public bool IsIntroWatched() => data.introVideoWatched;
+
+    public bool IsVoiceoverPlayed() => data.voiceoverPlayed;
+
+    public void MarkVoiceoverPlayed()
+    {
+        data.voiceoverPlayed = true;
+        Save();
+    }
 }
 
 [System.Serializable]
@@ -196,11 +208,12 @@ public class SlotData
 {
     public string slotName;
     public bool gameStarted;
-    public bool trainCompleted, l1Completed, l2Completed, l3Completed;
+    public bool trainCompleted, l1Completed, l2Completed, l3Completed, dreamCompleted;
     public string trainUpgrade, trainUpgrade2;
     public string firstLevelUpgrade, firstLevelUpgrade2;
     public string secondLevelUpgrade, secondLevelUpgrade2;
     public string pendingAchievement;
     public List<string> solvedPuzzles = new List<string>();
-    public bool trainVideoWatched, l1VideoWatched, l2VideoWatched, l3VideoWatched, introVideoWatched;
+    public bool trainVideoWatched, l1VideoWatched, l2VideoWatched, l3VideoWatched, introVideoWatched, uDontDrUCrItVideoWatched;
+    public bool voiceoverPlayed;
 }

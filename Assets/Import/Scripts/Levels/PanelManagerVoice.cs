@@ -25,6 +25,9 @@ public class PanelManagerVoice : MonoBehaviour
     {
         yield return new WaitUntil(() => !audioSource.isPlaying);
         OpenFloors();
+        
+        if (GameProgressManager.Instance != null)
+            GameProgressManager.Instance.MarkVoiceoverPlayed();
     }
 
     public void StopVoice()

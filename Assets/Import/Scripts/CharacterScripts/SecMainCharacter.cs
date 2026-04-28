@@ -253,7 +253,8 @@ public class SecMainCharacter : MonoBehaviour
         var voicePanel = FindObjectOfType<PanelManagerVoice>();
         if (voicePanel != null)
         {
-            if (introWatched)
+            bool voiceoverPlayed = GameProgressManager.Instance != null && GameProgressManager.Instance.IsVoiceoverPlayed();
+            if (introWatched && !voiceoverPlayed)
                 voicePanel.StartVoice();
             else
                 voicePanel.StopVoice();

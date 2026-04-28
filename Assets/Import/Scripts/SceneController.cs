@@ -86,6 +86,14 @@ public class SceneController : MonoBehaviour
             VideoController.currentLevelForVideo = "Woky";
             LoadScene("VideoScene");
         }
+        else if (GameProgressManager.Instance != null && !GameProgressManager.Instance.IsVoiceoverPlayed())
+        {
+            VideoController.videoToPlay = 0;
+            VideoController.autoReturn = true;
+            VideoController.spawnAtIntroZone = true;
+            VideoController.currentLevelForVideo = "Intro";
+            LoadScene("VideoScene");
+        }
         else
         {
             LoadScene("MainScene");
@@ -98,6 +106,7 @@ public class SceneController : MonoBehaviour
     public void PlayVideoTDUP() { GoToVideo(2, false); }
     public void PlayVideoSOS() { GoToVideo(3, false); }
     public void PlayVideoOOP() { GoToVideo(4, false); }
+    public void PlayVideoUDontDrUCrIt() { GoToVideo(6, false); }
 
     private void GoToVideo(int index, bool spawnAtIntro)
     {

@@ -71,10 +71,18 @@ public class VideoController : MonoBehaviour
                 PlayerPrefs.Save();
             }
 
-            Time.timeScale = 1;
+Time.timeScale = 1;
             AudioListener.pause = false;
 
-            SceneManager.LoadScene("MainScene");
+            bool isUDontDrUCrIt = videoPlayer.clip == videos[6];
+            if (isUDontDrUCrIt)
+            {
+                SceneManager.LoadScene("MainMenuNAD");
+            }
+            else
+            {
+                SceneManager.LoadScene("MainScene");
+            }
         }
     }
 }

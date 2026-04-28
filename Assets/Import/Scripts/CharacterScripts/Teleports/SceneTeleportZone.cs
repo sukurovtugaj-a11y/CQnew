@@ -83,6 +83,7 @@ public class SceneTeleportZone : MonoBehaviour
                 var s when s.StartsWith("L1") => "L1",
                 var s when s.StartsWith("L2") => "L2",
                 var s when s.StartsWith("Train") => "TrainL",
+                var s when s.StartsWith("DreamRunning") => "DreamRunning",
                 _ => null
             };
             if (level != null && GameProgressManager.Instance != null)

@@ -64,6 +64,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\CameraController.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\PlayerInteraction.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\JumpAbilityData.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\TriggerObjectDisabler.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerHealthComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSlideComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SideLauncher.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\SpawnPointManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportZone.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\Trampoline.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\PanelManagerBlocker.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\ManualCheckpoint.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerUpgradeComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\TrapDamageZone.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Assets\Import\Scripts\UI\SaveS\GameProgressManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\SlideDamageHandler.cs" />
     <Compile Include="Assets\Import\Scripts\UI\TerminalMenu.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\VoiceAndSoundTrigger.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\SaveSlot.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PanelDebug.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SlopeSurface.cs" />

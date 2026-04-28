@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     private Vector3 GetBaseOffset(float x)
     {
         if (SceneManager.GetActiveScene().name == "MainScene")
-            return new Vector3(x, 2.5f, -18.5f);
+            return new Vector3(x, 4f, -18.5f);
         if (SceneManager.GetActiveScene().name == "L1")
             return new Vector3(x, 2f, -23f);
         if (SceneManager.GetActiveScene().name == "L1Part2")
