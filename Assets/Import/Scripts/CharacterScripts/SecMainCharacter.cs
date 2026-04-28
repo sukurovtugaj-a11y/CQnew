@@ -233,8 +233,6 @@ public class SecMainCharacter : MonoBehaviour
             {
                 transform.position = introZone.transform.position;
                 controlLockTimer = 2f;
-                var mover = FindObjectOfType<OPollMover>();
-                if (mover != null) mover.StartMoving();
             }
             
             if (signal != null) signal.StopSignal();
@@ -249,6 +247,16 @@ public class SecMainCharacter : MonoBehaviour
             {
                 if (signal != null) signal.StopSignal();
             }
+        }
+
+        // PanelManagerVoice - звук И полы
+        var voicePanel = FindObjectOfType<PanelManagerVoice>();
+        if (voicePanel != null)
+        {
+            if (introWatched)
+                voicePanel.StartVoice();
+            else
+                voicePanel.StopVoice();
         }
 
         if (VideoController.wokyJustPlayed)

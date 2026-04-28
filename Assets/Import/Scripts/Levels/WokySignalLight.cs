@@ -14,7 +14,7 @@ public class WokySignalLight : MonoBehaviour
     private float defaultRadius;
     private bool isBlinking = false;
 
-void Start()
+    void Start()
     {
         if (targetLight != null)
             defaultRadius = targetLight.pointLightOuterRadius;

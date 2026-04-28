@@ -81,6 +81,7 @@
     <Compile Include="Assets\Import\Scripts\Levels\NoSlideZone.cs" />
     <Compile Include="Assets\Import\Scripts\Enemies\AIcontroller.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\CarTrigger.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\PanelManagerVoice.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\SpawnPointManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportZone.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\Trampoline.cs" />

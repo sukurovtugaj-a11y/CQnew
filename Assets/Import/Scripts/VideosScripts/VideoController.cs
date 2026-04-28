@@ -65,7 +65,7 @@ public class VideoController : MonoBehaviour
             spawnAtIntroZone = false;
             spawnAtWokyZone = false;
 
-if (introJustPlayed)
+            if (introJustPlayed)
             {
                 PlayerPrefs.SetInt("IntroWatched", 1);
                 PlayerPrefs.Save();
