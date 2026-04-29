@@ -60,6 +60,7 @@ public class PlayerSlideComponent
         owner.slideType = type;
         owner.slideTimer = duration;
         owner.slideDirection = direction;
+        owner.sound?.PlaySlideSound();
         if (type == "Slope" && speed > 0) { owner.savedSlideSpeed = owner.slideSpeed; owner.slideSpeed = speed; }
         if (type == "Special") { owner.savedSlideSpeed = owner.slideSpeed; owner.slideSpeed = owner.zoneSlideSpeed; }
         if (type == "Normal") owner.savedSlideSpeed = owner.slideSpeed;

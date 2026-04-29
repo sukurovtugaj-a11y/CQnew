@@ -82,6 +82,7 @@ public class SecMainCharacter : MonoBehaviour
     internal Vector2 slideDirection;
     internal float slideTimer;
     internal float zoneSlideSpeed;
+    internal bool wasInAir = false;
     internal SlideZone currentSlideZone;
 
     internal float controlLockTimer;
@@ -294,8 +295,8 @@ public class SecMainCharacter : MonoBehaviour
                 slide.StartSlide("Normal", normalSlideDuration, Vector2.zero);
             }
 
-            // Обновляем звуки
-            sound?.UpdateSounds(movement.HorizontalInput != 0, movement.IsGrounded(), isBoosting);
+            // Обновляем звуки (отключаем, если скользим)
+            sound?.UpdateSounds(movement.HorizontalInput != 0, movement.IsGrounded(), isBoosting, isSliding);
         }
         if (Input.GetKeyDown(KeyCode.W)) dash.TryDashOrTeleport();
         if (Input.GetKeyDown(KeyCode.F5)) checkpoint.TrySetCheckpoint();

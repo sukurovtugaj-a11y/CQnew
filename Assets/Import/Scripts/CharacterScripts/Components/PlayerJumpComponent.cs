@@ -58,6 +58,7 @@ public class PlayerJumpComponent
         owner.currentState = SecMainCharacter.PlayerState.Airborne;
         owner.extraJumpsLeft = owner.maxExtraJumps;
         owner.coyoteTimeCounter = 0;
+        owner.sound?.PlayJumpSound();
     }
 
     private void ExecuteAirJump()
@@ -66,5 +67,6 @@ public class PlayerJumpComponent
         rb.velocity = new Vector2(rb.velocity.x, owner.jumpSpeed);
         owner.extraJumpsLeft--;
         owner.coyoteTimeCounter = 0;
+        owner.sound?.PlayJumpSound();
     }
 }

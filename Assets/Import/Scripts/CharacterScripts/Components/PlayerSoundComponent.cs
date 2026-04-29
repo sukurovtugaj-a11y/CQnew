@@ -8,6 +8,11 @@ public class PlayerSoundComponent : MonoBehaviour
     public AudioClip[] grassWalkSounds;
     public AudioClip[] grassBoostSounds;
 
+    // Новые звуки (прыжок, приземление, скольжение)
+    public AudioClip[] jumpSounds;
+    public AudioClip[] landSounds;
+    public AudioClip[] slideSounds;
+
     // Настройки
     public float walkSoundInterval = 0.4f;
     public float boostSoundInterval = 0.3f;
@@ -30,9 +35,9 @@ public class PlayerSoundComponent : MonoBehaviour
         }
     }
 
-    public void UpdateSounds(bool isMoving, bool isGrounded, bool isBoosting)
+    public void UpdateSounds(bool isMoving, bool isGrounded, bool isBoosting, bool isSliding)
     {
-        if (!isGrounded || !isMoving || audioSource == null)
+        if (!isGrounded || !isMoving || isSliding || audioSource == null)
         {
             soundTimer = 0f;
             return;
@@ -69,6 +74,32 @@ public class PlayerSoundComponent : MonoBehaviour
         if (clip != null)
         {
             audioSource.PlayOneShot(clip);
+        }
+    }
+
+    // === НОВОЕ: Звуки прыжка, приземления, скольжения ===
+    public void PlayJumpSound()
+    {
+        PlayRandomFromArray(jumpSounds);
+    }
+
+    public void PlayLandSound()
+    {
+        PlayRandomFromArray(landSounds);
+    }
+
+    public void PlaySlideSound()
+    {
+        PlayRandomFromArray(slideSounds);
+    }
+
+    private void PlayRandomFromArray(AudioClip[] clips)
+    {
+        if (clips == null || clips.Length == 0 || audioSource == null) return;
+        int index = Random.Range(0, clips.Length);
+        if (clips[index] != null)
+        {
+            audioSource.PlayOneShot(clips[index]);
         }
     }
 }

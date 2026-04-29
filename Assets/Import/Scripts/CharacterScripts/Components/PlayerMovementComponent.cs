@@ -112,11 +112,22 @@ public class PlayerMovementComponent
     private void UpdateState(bool isGrounded)
     {
         if (owner.currentState == SecMainCharacter.PlayerState.Grounded && !isGrounded)
+        {
             owner.currentState = SecMainCharacter.PlayerState.Airborne;
+            owner.wasInAir = true; // Запоминаем, что ушли в воздух
+        }
+
         if (owner.currentState == SecMainCharacter.PlayerState.Airborne && isGrounded)
         {
             owner.currentState = SecMainCharacter.PlayerState.Grounded;
             owner.extraJumpsLeft = owner.maxExtraJumps;
+
+            // Играем звук приземления ТОЛЬКО если реально были в воздухе
+            if (owner.wasInAir)
+            {
+                owner.sound?.PlayLandSound();
+                owner.wasInAir = false; // Сбрасываем флаг
+            }
         }
     }
 
