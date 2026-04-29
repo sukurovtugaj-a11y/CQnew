@@ -47,6 +47,10 @@ public class PuzzleUI : MonoBehaviour
     {
         if (solved) return;
 
+        // ТВОЙ СПОСОБ: отключаем PlayerMenuScript при открытии головоломки
+        var playerMenu = FindObjectOfType<PlayerMenuScript>();
+        if (playerMenu != null) playerMenu.enabled = false;
+
         gameObject.SetActive(true);
 
         if (originalTexts.Count == 0)
@@ -153,5 +157,9 @@ public class PuzzleUI : MonoBehaviour
         Time.timeScale = 1f;
         solved = false;
         gameObject.SetActive(false);
+
+        // ТВОЙ СПОСОБ: включаем PlayerMenuScript обратно
+        var playerMenu = FindObjectOfType<PlayerMenuScript>();
+        if (playerMenu != null) playerMenu.enabled = true;
     }
 }

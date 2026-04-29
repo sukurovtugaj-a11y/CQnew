@@ -193,13 +193,20 @@ public class GameProgressManager : MonoBehaviour
     }
 
     public bool IsIntroWatched() => data.introVideoWatched;
-
+    
     public bool IsVoiceoverPlayed() => data.voiceoverPlayed;
-
+    
     public void MarkVoiceoverPlayed()
     {
         data.voiceoverPlayed = true;
         Save();
+    }
+
+    public void ResetData()
+    {
+        data = new SlotData();
+        // НЕ созраняем в файл! Файл уже удалён в ConfirmDelete()
+        Debug.Log("GameProgressManager: данные сброшены (без записи в файл)!");
     }
 }
 

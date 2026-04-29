@@ -77,6 +77,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\SecMainCharacter.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuOpener.cs" />
     <Compile Include="Assets\Import\Scripts\UI\CursorManager.cs" />
+    <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSoundComponent.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MyButton.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\PortalTrainGate.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\NoSlideZone.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\DeathZone.cs" />
     <Compile Include="Assets\Import\Scripts\UI\DeathMenuManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuScript.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\GrassTrigger.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\OPollMover.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PuzzlesScripts\PuzzleUI.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Horizontal.cs" />

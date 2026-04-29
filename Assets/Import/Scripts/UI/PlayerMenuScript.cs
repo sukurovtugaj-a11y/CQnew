@@ -29,6 +29,7 @@ public class PlayerMenuScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // ТВОЙ СПОСОБ: Если открыто меню интерактивного объекта — закрываем его и ИГНОРИРУЕМ паузу
             if (currentOtherPanel != null)
             {
                 CloseOtherPanel();
@@ -104,6 +105,9 @@ public class PlayerMenuScript : MonoBehaviour
 
         if (playerInteraction != null)
             playerInteraction.RefreshInteractIcon();
+
+        // ТВОЙ СПОСОБ: отключаем скрипт для панели смерти
+        this.enabled = false;
     }
 
     // === НОВОЕ: Перезапустить текущую сцену ===
@@ -170,6 +174,15 @@ public class PlayerMenuScript : MonoBehaviour
 
         if (playerInteraction != null)
             playerInteraction.RefreshInteractIcon();
+
+        // ТВОЙ СПОСОБ: отключаем САМ скрипт, чтобы ESC не открывал паузу
+        this.enabled = false;
+
+        // Сообщаем UIStateManager, что открыто меню взаимодействия
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.RequestInteractionMenu();
+        }
     }
 
     private void CloseOtherPanel()
@@ -185,6 +198,9 @@ public class PlayerMenuScript : MonoBehaviour
 
             if (playerInteraction != null)
                 playerInteraction.RefreshInteractIcon();
+
+            // ТВОЙ СПОСОБ: включаем скрипт обратно ТОЛЬКО когда реально закрыли панель
+            this.enabled = true;
         }
     }
 

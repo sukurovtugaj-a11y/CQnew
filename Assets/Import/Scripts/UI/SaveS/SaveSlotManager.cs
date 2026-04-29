@@ -8,7 +8,7 @@ public class SaveSlotManager : MonoBehaviour
     public GameObject playButton;
     public GameObject applyButton;
     public GameObject editButton;
-    public GameObject deleteButton;
+    public GameObject deleteButton;  // Кнопка "Удалить" (настраивается в инспекторе)
 
     private string savePath => Application.dataPath + "/Save/slot.json";
 
@@ -26,7 +26,6 @@ public class SaveSlotManager : MonoBehaviour
         playButton.GetComponent<MyButton>().AddClick(() => PlayGame());
         applyButton.GetComponent<MyButton>().AddClick(() => SaveName());
         editButton.GetComponent<MyButton>().AddClick(() => StartEdit());
-        deleteButton.GetComponent<MyButton>().AddClick(() => DeleteSave());
         fieldName.onValueChanged.AddListener((val) => applyButton.SetActive(true));
     }
 
@@ -50,14 +49,27 @@ public class SaveSlotManager : MonoBehaviour
         applyButton.SetActive(false);
     }
 
-    void DeleteSave()
+    public void ConfirmDelete()
     {
+        // 1. Удаляем файл сохранения
         if (File.Exists(savePath)) File.Delete(savePath);
+
+        // 2. СБРАСЫВАЕМ данные в GameProgressManager (чтобы игра "забыла" прогресс)
+        if (GameProgressManager.Instance != null)
+            GameProgressManager.Instance.ResetData();
+
+        // 3. Очищаем UI
         fieldName.text = "";
         editButton.SetActive(false);
         deleteButton.SetActive(false);
-    }
 
+        // 4. Скрываем панель подтверждения
+        var panel = GameObject.Find("PanelAreYuoSure");
+        if (panel != null) panel.SetActive(false);
+
+        Debug.Log("Сохранение ПОЛНОСТЬЮ удалено (файл + память GameProgressManager)!");
+    }
+    
     void PlayGame()
     {
         string name = fieldName.text.Trim();

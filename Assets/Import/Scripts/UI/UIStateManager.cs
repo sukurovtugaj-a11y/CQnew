@@ -16,7 +16,8 @@ public class UIStateManager : MonoBehaviour
     {
         Gameplay,
         PauseMenu,
-        InteractionMenu
+        InteractionMenu,
+        DeathMenu
     }
 
     private UIMode currentState = UIMode.Gameplay;
@@ -52,7 +53,10 @@ public class UIStateManager : MonoBehaviour
                 break;
             case UIMode.InteractionMenu:
                 CloseInteractionMenu();
-                OpenPauseMenu();
+                // НЕ открываем паузу — просто возвращаемся в игру
+                break;
+            case UIMode.DeathMenu:
+                // В панели смерти ESC может быть обработан отдельно, игнорируем здесь
                 break;
             case UIMode.PauseMenu:
                 ClosePauseMenu();
@@ -66,7 +70,7 @@ public class UIStateManager : MonoBehaviour
         currentState = UIMode.InteractionMenu;
         Time.timeScale = 0f;
         Cursor.visible = true;
-        playerMenu?.CloseCurrentPanel();
+        // Не закрываем панель здесь, это делает PlayerMenuScript.OpenPanel()
     }
 
     public void CloseInteractionMenu()
@@ -76,6 +80,7 @@ public class UIStateManager : MonoBehaviour
             currentState = UIMode.Gameplay;
             Time.timeScale = 1f;
             Cursor.visible = false;
+            playerMenu?.CloseCurrentPanel();  // Реально закрываем панель интерактивного объекта
         }
     }
 

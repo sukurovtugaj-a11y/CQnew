@@ -18,6 +18,7 @@ public class SecMainCharacter : MonoBehaviour
     private PlayerUpgradeComponent upgrades;
     private PlayerCheckpointComponent checkpoint;
     private PlayerMiscComponent misc;
+    public PlayerSoundComponent sound;
 
     // === Inspector fields (unchanged) ===
     [Header("Health")]
@@ -176,6 +177,7 @@ public class SecMainCharacter : MonoBehaviour
         upgrades = new PlayerUpgradeComponent(this);
         checkpoint = new PlayerCheckpointComponent(this);
         misc = new PlayerMiscComponent(this);
+        sound = GetComponent<PlayerSoundComponent>();
 
         jump.RecalculateJumpParameters();
         if (activeAbilities.Count == 0) { maxExtraJumps = initialMaxExtraJumps; extraJumpsLeft = maxExtraJumps; }
@@ -287,12 +289,14 @@ public class SecMainCharacter : MonoBehaviour
         {
             movement.UpdateInput();
             jump.UpdateInput();
-            if (controlLockTimer <= 0f && !isSliding && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown))
+            if (controlLockTimer <= 0f && !isSliding && movement.IsGrounded() && Input.GetKeyDown(keys.MoveDown) && noSlideCount <= 0)
             {
                 slide.StartSlide("Normal", normalSlideDuration, Vector2.zero);
             }
+
+            // Обновляем звуки
+            sound?.UpdateSounds(movement.HorizontalInput != 0, movement.IsGrounded(), isBoosting);
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) misc.ToggleMenu();
         if (Input.GetKeyDown(KeyCode.W)) dash.TryDashOrTeleport();
         if (Input.GetKeyDown(KeyCode.F5)) checkpoint.TrySetCheckpoint();
         invuln.UpdateInput();

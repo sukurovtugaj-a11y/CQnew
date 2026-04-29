@@ -15,6 +15,8 @@ public class PlayerMovementComponent
     }
 
     // === INPUT ===
+    public float HorizontalInput => owner.horizontalInput;
+
     public void UpdateInput()
     {
         if (owner.controlLockTimer > 0f)
