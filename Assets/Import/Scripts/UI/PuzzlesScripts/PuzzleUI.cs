@@ -32,6 +32,9 @@ public class PuzzleUI : MonoBehaviour
     [SerializeField] private AudioSource errorSound;
     [SerializeField] private AudioSource successSound;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioSource openSound;
+
     [Header("On Success")]
     public UnityEvent onSuccess;
 
@@ -51,7 +54,16 @@ public class PuzzleUI : MonoBehaviour
         var playerMenu = FindObjectOfType<PlayerMenuScript>();
         if (playerMenu != null) playerMenu.enabled = false;
 
+        // СООБЩАЕМ UIStateManager, что открыто меню взаимодействия
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.RequestInteractionMenu();
+        }
+
         gameObject.SetActive(true);
+
+        // ИГРАЕМ ЗВУК ОТКРЫТИЯ ГОЛОВОЛОМКИ
+        if (openSound != null) openSound.Play();
 
         if (originalTexts.Count == 0)
             foreach (var line in codeInputs)
@@ -138,6 +150,20 @@ public class PuzzleUI : MonoBehaviour
 
         Time.timeScale = 1f;
         onSuccess?.Invoke();
+
+        // ТВОЙ СПОСОБ: СНАЧАЛА включаем PlayerMenuScript обратно!
+        var playerMenu = FindObjectOfType<PlayerMenuScript>();
+        if (playerMenu != null) 
+        {
+            playerMenu.enabled = true;
+            Debug.Log("[PuzzleUI] PlayerMenuScript ВКЛЮЧЕН обратно!");
+        }
+
+        // ТОЛЬКО ТЕПЕРЬ сообщаем UIStateManager
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.CloseInteractionMenu();
+        }
 
         if (gameObject.activeSelf)
         {

@@ -3789,9 +3789,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d624bb43530633a4b8d327d7d1b8da8b, type: 3}
   - {fileID: 8300000, guid: 8e1f566004a56a849867a9647c8c4c1e, type: 3}
   jumpSounds:
-  - {fileID: 8300000, guid: 370a9f69537e4674d8847971763080c2, type: 3}
+  - {fileID: 8300000, guid: ab773b08104b1494abdee7e0e7981d08, type: 3}
   landSounds:
-  - {fileID: 8300000, guid: 370a9f69537e4674d8847971763080c2, type: 3}
+  - {fileID: 8300000, guid: 5da484ac67b6b0e4aab26a01661d0e35, type: 3}
   slideSounds:
   - {fileID: 8300000, guid: ed19110d00fe20849b960b0ab1a2cd91, type: 3}
   walkSoundInterval: 0.4

@@ -95,6 +95,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerAchievementComponent.cs" />
     <Compile Include="Assets\Import\Scripts\SettingsCore.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UpgradeManager.cs" />
+    <Compile Include="Assets\Import\Scripts\UI\SequentialAudioPlayer.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerMovementComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportableObject.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportActivator.cs" />

@@ -75,12 +75,19 @@ public class UIStateManager : MonoBehaviour
 
     public void CloseInteractionMenu()
     {
-        if (currentState == UIMode.InteractionMenu)
+        // ПРИНУДИТЕЛЬНО включаем PlayerMenuScript, если он выключен (для головоломок)
+        if (playerMenu != null && !playerMenu.enabled)
         {
-            currentState = UIMode.Gameplay;
-            Time.timeScale = 1f;
-            Cursor.visible = false;
-            playerMenu?.CloseCurrentPanel();  // Реально закрываем панель интерактивного объекта
+            playerMenu.enabled = true;
+        }
+
+        currentState = UIMode.Gameplay;
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        
+        if (playerMenu != null)
+        {
+            playerMenu.CloseCurrentPanel();  // Реально закрываем панель интерактивного объекта
         }
     }
 
