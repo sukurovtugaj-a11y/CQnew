@@ -6,6 +6,7 @@ public class PlayerMovementComponent
     private readonly Rigidbody2D rb;
     private MovingPlatform_Horizontal currentHPlatform;
     private Vector3 lastPlatformPos;
+    private float airborneStartY;
 
     public PlayerMovementComponent(SecMainCharacter owner, Rigidbody2D rb)
     {
@@ -114,7 +115,8 @@ public class PlayerMovementComponent
         if (owner.currentState == SecMainCharacter.PlayerState.Grounded && !isGrounded)
         {
             owner.currentState = SecMainCharacter.PlayerState.Airborne;
-            owner.wasInAir = true; // Запоминаем, что ушли в воздух
+            airborneStartY = owner.transform.position.y; // Запоминаем высоту ухода в воздух
+            owner.wasInAir = true;
         }
 
         if (owner.currentState == SecMainCharacter.PlayerState.Airborne && isGrounded)
@@ -122,11 +124,15 @@ public class PlayerMovementComponent
             owner.currentState = SecMainCharacter.PlayerState.Grounded;
             owner.extraJumpsLeft = owner.maxExtraJumps;
 
-            // Играем звук приземления ТОЛЬКО если реально были в воздухе
+            // Играем звук приземления только если падение было достаточно высоким
             if (owner.wasInAir)
             {
-                owner.sound?.PlayLandSound();
-                owner.wasInAir = false; // Сбрасываем флаг
+                float fallDistance = airborneStartY - owner.transform.position.y;
+                if (fallDistance >= 1.0f) // Порог высоты в метрах
+                {
+                    owner.sound?.PlayLandSound();
+                }
+                owner.wasInAir = false;
             }
         }
     }

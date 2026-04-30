@@ -16,10 +16,12 @@ public class PlayerSoundComponent : MonoBehaviour
     // Настройки
     public float walkSoundInterval = 0.4f;
     public float boostSoundInterval = 0.3f;
+    public float slideSoundCooldown = 0.5f; // Задержка между звуками скольжения
 
     private AudioSource audioSource;
     private float soundTimer;
     private bool isOnGrass;
+    private float lastSlideSoundTime = -10f; // Время последнего звука скольжения
 
     private void Awake()
     {
@@ -90,7 +92,14 @@ public class PlayerSoundComponent : MonoBehaviour
 
     public void PlaySlideSound()
     {
-        PlayRandomFromArray(slideSounds);
+        // Проверяем задержку, чтобы звук не накладывался
+        if (Time.time - lastSlideSoundTime < slideSoundCooldown) return;
+
+        if (slideSounds != null && slideSounds.Length > 0)
+        {
+            lastSlideSoundTime = Time.time;
+            PlayRandomFromArray(slideSounds);
+        }
     }
 
     private void PlayRandomFromArray(AudioClip[] clips)

@@ -13,6 +13,9 @@ public class Trampoline : MonoBehaviour
     [Tooltip("���������� ������ (�����������)")]
     public GameObject bounceEffect;
 
+    [Tooltip("Звук отскока")]
+    public AudioSource bounceSound;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         MonoBehaviour player = collision.GetComponent<SecMainCharacter>();
@@ -23,10 +26,13 @@ public class Trampoline : MonoBehaviour
 
         if (rb.velocity.y >= 0) return;
 
-        Vector2 newVelocity = new Vector2(rb.velocity.x * horizontalRetention, bounceForce);
-        rb.velocity = newVelocity;
+    Vector2 newVelocity = new Vector2(rb.velocity.x * horizontalRetention, bounceForce);
+    rb.velocity = newVelocity;
 
-        if (bounceEffect != null)
+    if (bounceSound != null)
+        bounceSound.Play();
+
+    if (bounceEffect != null)
             Instantiate(bounceEffect, transform.position, Quaternion.identity);
 
         Debug.Log($"[?????] ??????! ????: {bounceForce}");

@@ -113,6 +113,7 @@ public class PlayerMenuScript : MonoBehaviour
     // === НОВОЕ: Перезапустить текущую сцену ===
     public void RestartLevel()
     {
+        AudioListener.pause = false;
         Time.timeScale = 1f;
 
         // === Сбрасываем здоровье на максимум ===
@@ -136,12 +137,14 @@ public class PlayerMenuScript : MonoBehaviour
 
     public void GoToHub()
     {
+        AudioListener.pause = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainScene");
     }
 
     public void GoToMainMenu()
     {
+        AudioListener.pause = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
@@ -192,6 +195,7 @@ public class PlayerMenuScript : MonoBehaviour
             currentOtherPanel.SetActive(false);
             currentOtherPanel = null;
 
+            AudioListener.pause = false;
             Time.timeScale = 1f;
             Cursor.visible = false;
             ApplyCustomCursor(false);
