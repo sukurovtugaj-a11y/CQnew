@@ -14,7 +14,7 @@ public class SettingsCore : MonoBehaviour
 
     private void Awake()
     {
-        // Инициализируем все вложенные объекты
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (gameSettings.screenSettings == null)
             gameSettings.screenSettings = new ScreenSettings();
         if (gameSettings.audioSettings == null)
@@ -42,10 +42,7 @@ public class SettingsCore : MonoBehaviour
             res = new Vector2Int(640, 480);
         }
         gameSettings.screenSettings.resolution = res;
-        gameSettings.audioSettings.MusicVolume = Convertor.ReadINT(Data, "Music Volume", 50);
-        gameSettings.audioSettings.EffectVolume = Convertor.ReadINT(Data, "Effects Volume", 50);
-        gameSettings.audioSettings.VoiceVolume = Convertor.ReadINT(Data, "Voice Volume", 50);
-        gameSettings.audioSettings.UiVolume = Convertor.ReadINT(Data, "UI Volume", 50);
+        gameSettings.audioSettings.MasterVolume = Convertor.ReadINT(Data, "Master Volume", 50);
 
         gameSettings.keyControll.MoveFront = Convertor.ReadSTRING(Data, "Front", "d");
         gameSettings.keyControll.MoveBack = Convertor.ReadSTRING(Data, "Back", "a");
@@ -58,6 +55,32 @@ public class SettingsCore : MonoBehaviour
         gameSettings.screenSettings.typeScreen = Convertor.ReadENUM(Data, "typeScreen", TypeScreen.Windowed);
 
         Screen.SetResolution(res.x, res.y, true);
+    }
+
+    public void SaveSettings()
+    {
+        if (fileSystem == null) return;
+
+        Vector2Int res = gameSettings.screenSettings.resolution;
+        string resString = $"({res.x},{res.y})";
+        string[] data = new string[]
+        {
+            "[GENERAL]",
+            "[SOUNDS]",
+            "     Master Volume:" + gameSettings.audioSettings.MasterVolume,
+            "[SCREEN]",
+            "       resolution:" + resString,
+            "       typeScreen:" + gameSettings.screenSettings.typeScreen.ToString(),
+            "[KEYS]",
+            "            Front:" + gameSettings.keyControll.MoveFront,
+            "             Back:" + gameSettings.keyControll.MoveBack,
+            "             Down:" + gameSettings.keyControll.MoveDown,
+            "       JumpButton:" + gameSettings.keyControll.JumpButton,
+            "       MenuButton:" + gameSettings.keyControll.MenuButton,
+            "       Dash/TeleportButton:" + gameSettings.keyControll.DashTeleportButton,
+            "InvulnerabilityButton:" + gameSettings.keyControll.InvulnerabilityButton,
+        };
+        fileSystem.WriteData(gameSettings.pathData.GameSettingsPath, data);
     }
 }
 
@@ -134,10 +157,7 @@ public class FileSystem : MonoBehaviour
                 {
                     "[GENERAL]",
                     "[SOUNDS]",
-                    "     Music Volume:" + SCore.gameSettings.audioSettings.MusicVolume,
-                    "   Effects Volume:" + SCore.gameSettings.audioSettings.EffectVolume,
-                    "     Voice Volume:" + SCore.gameSettings.audioSettings.VoiceVolume,
-                    "        UI Volume:" + SCore.gameSettings.audioSettings.UiVolume,
+                    "     Master Volume:" + SCore.gameSettings.audioSettings.MasterVolume,
                     "[SCREEN]",
                     "       resolution:" + resString,
                     "       typeScreen:" + SCore.gameSettings.screenSettings.typeScreen.ToString(),
@@ -307,10 +327,7 @@ public class ScreenSettings
 [System.Serializable]
 public class AudioSettings
 {
-    [Range(0, 100)] public int MusicVolume = 50;
-    [Range(0, 100)] public int EffectVolume = 50;
-    [Range(0, 100)] public int VoiceVolume = 50;
-    [Range(0, 100)] public int UiVolume = 50;
+    [Range(0, 100)] public int MasterVolume = 50;
 }
 
 [System.Serializable]
@@ -363,7 +380,7 @@ public enum TypeAI
 [System.Serializable]
 public class WeaponItem
 {
-    public string NameWeapon = "Безымянный";
+    public string NameWeapon = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
     public string information = "";
     public Sprite IconItem;
     public float damage = 1f; 

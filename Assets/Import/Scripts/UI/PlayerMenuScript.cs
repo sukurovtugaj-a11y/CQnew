@@ -20,6 +20,9 @@ public class PlayerMenuScript : MonoBehaviour
     public Texture2D pauseCursorTexture;
     public Vector2 pauseCursorHotspot = Vector2.zero;
 
+    [Header("Settings Panel")]
+    public GameObject settingsPanel;
+
     private bool isPaused = false;
     private GameObject currentOtherPanel;
 
@@ -29,6 +32,16 @@ public class PlayerMenuScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (settingsPanel != null && settingsPanel.activeSelf)
+            {
+                settingsPanel.SetActive(false);
+                if (isPaused || currentOtherPanel != null)
+                {
+                    MenuPanel.SetActive(true);
+                }
+                return;
+            }
+
             // ТВОЙ СПОСОБ: Если открыто меню интерактивного объекта — закрываем его и ИГНОРИРУЕМ паузу
             if (currentOtherPanel != null)
             {
@@ -227,6 +240,15 @@ public class PlayerMenuScript : MonoBehaviour
 
         if (playerInteraction != null)
             playerInteraction.RefreshInteractIcon();
+    }
+
+    public void OpenSettingsPanel()
+    {
+        if (settingsPanel == null) return;
+
+        MenuPanel.SetActive(false);
+        settingsPanel.SetActive(true);
+        Cursor.visible = true;
     }
 
     private void ApplyCustomCursor(bool enable)
