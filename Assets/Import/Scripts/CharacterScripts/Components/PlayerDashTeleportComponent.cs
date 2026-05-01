@@ -51,10 +51,13 @@ public class PlayerDashTeleportComponent
             ? objBounds.max.x + owner.teleportOffset
             : objBounds.min.x - owner.teleportOffset;
         owner.transform.position = new Vector3(newX, owner.transform.position.y, owner.transform.position.z);
+        owner.sound?.PlayTeleportSound();
     }
 
     private IEnumerator DoDash()
     {
+        owner.sound?.PlayDashSound();
+
         IsDashing = true;
         owner.canDash = false;
         owner.isDashing = true;

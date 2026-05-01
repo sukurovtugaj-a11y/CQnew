@@ -104,6 +104,9 @@ public class SecMainCharacter : MonoBehaviour
     public SceneController SC;
     public GameObject MenuPanel;
     public CameraController cameraController;
+    [Header("Checkpoint")]
+    public GameObject checkpointMarkerPrefab;
+
     [Header("Camera")]
     public GameObject cameraPrefab;
 

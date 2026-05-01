@@ -113,6 +113,38 @@ public class PlayerSoundComponent : MonoBehaviour
         }
     }
 
+    // === Звук чекпоинта ===
+    public AudioClip checkpointSound;
+
+    public void PlayCheckpointSound()
+    {
+        if (checkpointSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(checkpointSound);
+        }
+    }
+
+    // === Звуки дэша и телепорта ===
+    public AudioClip dashSound;
+
+    public void PlayDashSound()
+    {
+        if (dashSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(dashSound);
+        }
+    }
+
+    public AudioClip teleportSound;
+
+    public void PlayTeleportSound()
+    {
+        if (teleportSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(teleportSound);
+        }
+    }
+
     private void PlayRandomFromArray(AudioClip[] clips)
     {
         if (clips == null || clips.Length == 0 || audioSource == null) return;
