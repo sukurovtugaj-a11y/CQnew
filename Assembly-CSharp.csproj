@@ -111,6 +111,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Checkpoint.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\PlatformToggle.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SlideZone.cs" />
+    <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\InvulnerabilityTimer.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\GameProgressManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\SlideDamageHandler.cs" />
     <Compile Include="Assets\Import\Scripts\UI\TerminalMenu.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Assets\Import\Scripts\UI\PlayerMenuScript.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerDashTeleportComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerJumpComponent.cs" />
+    <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\CooldownTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

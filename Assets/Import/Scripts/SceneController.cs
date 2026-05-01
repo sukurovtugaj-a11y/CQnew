@@ -63,7 +63,6 @@ public class SceneController : MonoBehaviour
             GameObject eventSystem = new GameObject("EventSystem");
             eventSystem.AddComponent<EventSystem>();
 
-            // Добавляем StandaloneInputModule для обработки ввода (мышь/клавиатура)
             var standaloneInput = eventSystem.AddComponent<StandaloneInputModule>();
             standaloneInput.forceModuleActive = true;
 

@@ -44,6 +44,10 @@ public class SecMainCharacter : MonoBehaviour
     internal bool isInvulnerable;
     internal bool canActivateInvulnerability;
 
+    [Header("Invulnerability UI")]
+    public GameObject invTimerPanel;    // Панель с текстом таймера неуязвимости
+    public GameObject cdTimerPanel;     // Панель с текстом таймера восстановления
+
     [Header("Movement")] public float moveSpeed = 5f;
     public float airControl = 0.5f;
 

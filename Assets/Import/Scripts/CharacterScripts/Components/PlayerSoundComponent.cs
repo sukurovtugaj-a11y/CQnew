@@ -102,6 +102,17 @@ public class PlayerSoundComponent : MonoBehaviour
         }
     }
 
+    // === НОВОЕ: Звук неуязвимости ===
+    public AudioClip invulnerabilitySound;
+
+    public void PlayInvulnerabilitySound()
+    {
+        if (invulnerabilitySound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(invulnerabilitySound);
+        }
+    }
+
     private void PlayRandomFromArray(AudioClip[] clips)
     {
         if (clips == null || clips.Length == 0 || audioSource == null) return;

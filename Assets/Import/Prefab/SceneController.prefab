@@ -48,3 +48,4 @@ MonoBehaviour:
   settingsCore: {fileID: 0}
   playerPrefab: {fileID: 7880914315446776174, guid: 4991dc90c2cfca14a8fda510858b4f6d, type: 3}
   menuScript: {fileID: 0}
+  fadePrefab: {fileID: 4003277540336964927, guid: a2223f9893043be47b2f815a8423d07e, type: 3}
