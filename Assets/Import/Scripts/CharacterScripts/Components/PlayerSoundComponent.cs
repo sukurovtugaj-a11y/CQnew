@@ -20,6 +20,12 @@ public class PlayerSoundComponent : MonoBehaviour
 
     private AudioSource audioSource;
     private float soundTimer;
+
+    public float Volume
+    {
+        get => audioSource != null ? audioSource.volume : 1f;
+        set { if (audioSource != null) audioSource.volume = value; }
+    }
     private bool isOnGrass;
     private float lastSlideSoundTime = -10f; // Время последнего звука скольжения
 

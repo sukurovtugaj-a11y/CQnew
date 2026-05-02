@@ -75,7 +75,9 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerCheckpointComponent.cs" />
     <Compile Include="Assets\Import\Scripts\VideosScripts\VideoController.cs" />
     <Compile Include="Assets\Import\NAD\ScroeController.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\Sollers.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\SecMainCharacter.cs" />
+    <Compile Include="Assets\Import\NAD\MainMenuNADCursor.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuOpener.cs" />
     <Compile Include="Assets\Import\Scripts\UI\CursorManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSoundComponent.cs" />
@@ -122,16 +124,19 @@
     <Compile Include="Assets\Import\Scripts\UI\PanelDebug.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SlopeSurface.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\CameraOffsetZone.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\QuietZone.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\BackgroundManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\InteractHintFollower.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Vertical.cs" />
     <Compile Include="Assets\Import\Scripts\SceneController.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\InterativeController.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\NoJumpSlideZone.cs" />
     <Compile Include="Assets\Import\Scripts\RainCameraFollower.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PlayerMenuScript.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerDashTeleportComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerJumpComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\CooldownTimer.cs" />
+    <Compile Include="Assets\Import\Scripts\Levels\SoundVoiceTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

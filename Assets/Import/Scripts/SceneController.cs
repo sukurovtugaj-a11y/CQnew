@@ -30,8 +30,10 @@ public class SceneController : MonoBehaviour
             return;
         }
 
-        if (SceneManager.GetActiveScene().name != "MainMenu")
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != "MainMenu" && sceneName != "MainMenuNAD" && sceneName != "Prestart" && sceneName != "VideoScene" && sceneName != "Upgrades")
         {
+            SpawnPointManager.forceLookRight = true;
             var inst = Instantiate(playerPrefab, Vector3.zero, Quaternion.Euler(0, 0, 0), null);
 
             var sec = inst.GetComponent<SecMainCharacter>();

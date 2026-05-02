@@ -50,19 +50,17 @@ public class PuzzleUI : MonoBehaviour
     {
         if (solved) return;
 
-        // ТВОЙ СПОСОБ: отключаем PlayerMenuScript при открытии головоломки
+        var playerInteraction = FindObjectOfType<PlayerInteraction>();
         var playerMenu = FindObjectOfType<PlayerMenuScript>();
         if (playerMenu != null) playerMenu.enabled = false;
 
-        // СООБЩАЕМ UIStateManager, что открыто меню взаимодействия
-        if (UIStateManager.Instance != null)
-        {
-            UIStateManager.Instance.RequestInteractionMenu();
-        }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        if (playerInteraction != null && playerInteraction.defaultCursorTexture != null)
+            Cursor.SetCursor(playerInteraction.defaultCursorTexture, playerInteraction.cursorHotspot, CursorMode.Auto);
 
         gameObject.SetActive(true);
 
-        // ИГРАЕМ ЗВУК ОТКРЫТИЯ ГОЛОВОЛОМКИ
         if (openSound != null) openSound.Play();
 
         if (originalTexts.Count == 0)
@@ -149,20 +147,14 @@ public class PuzzleUI : MonoBehaviour
         yield return new WaitForSecondsRealtime(successDelay);
 
         Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         onSuccess?.Invoke();
 
-        // ТВОЙ СПОСОБ: СНАЧАЛА включаем PlayerMenuScript обратно!
         var playerMenu = FindObjectOfType<PlayerMenuScript>();
         if (playerMenu != null) 
         {
             playerMenu.enabled = true;
-            Debug.Log("[PuzzleUI] PlayerMenuScript ВКЛЮЧЕН обратно!");
-        }
-
-        // ТОЛЬКО ТЕПЕРЬ сообщаем UIStateManager
-        if (UIStateManager.Instance != null)
-        {
-            UIStateManager.Instance.CloseInteractionMenu();
         }
 
         if (gameObject.activeSelf)
@@ -182,9 +174,10 @@ public class PuzzleUI : MonoBehaviour
             }
         Time.timeScale = 1f;
         solved = false;
+        Cursor.visible = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         gameObject.SetActive(false);
 
-        // ТВОЙ СПОСОБ: включаем PlayerMenuScript обратно
         var playerMenu = FindObjectOfType<PlayerMenuScript>();
         if (playerMenu != null) playerMenu.enabled = true;
     }

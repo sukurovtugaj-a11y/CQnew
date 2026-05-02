@@ -17,6 +17,7 @@ public class PlayerJumpComponent
     public void UpdateInput()
     {
         if (owner.controlLockTimer > 0f) return;
+        if (owner.noJumpCount > 0) return;
         if (Input.GetKeyDown(owner.keys.JumpButton))
             owner.jumpBufferCounter = owner.jumpBufferTime;
     }

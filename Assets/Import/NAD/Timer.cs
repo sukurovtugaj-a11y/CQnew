@@ -12,7 +12,24 @@ public class Timer : MonoBehaviour
     private void Tick()
     {
         transform.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = TimeValue.ToString("000");
-        if (TimeValue > -1) { TimeValue--; Invoke("Tick", 1f);}
-        else { CancelInvoke("Tick"); }
+
+        if (TimeValue <= 0)
+        {
+            CancelInvoke("Tick");
+            KillPlayer();
+            return;
+        }
+
+        TimeValue--;
+        Invoke("Tick", 1f);
+    }
+
+    private void KillPlayer()
+    {
+        var player = FindObjectOfType<SecMainCharacter>();
+        if (player != null)
+        {
+            player.Die();
+        }
     }
 }

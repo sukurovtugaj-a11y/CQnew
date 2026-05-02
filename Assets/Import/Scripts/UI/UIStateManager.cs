@@ -11,6 +11,10 @@ public class UIStateManager : MonoBehaviour
     public PlayerMenuScript playerMenu;
     public PlayerInteraction playerInteraction;
 
+    [Header("Cursor")]
+    public Texture2D menuCursorTexture;
+    public Vector2 menuCursorHotspot = Vector2.zero;
+
     // Текущее состояние
     private enum UIMode
     {
@@ -69,7 +73,10 @@ public class UIStateManager : MonoBehaviour
         if (currentState == UIMode.PauseMenu) return;
         currentState = UIMode.InteractionMenu;
         Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        if (menuCursorTexture != null)
+            Cursor.SetCursor(menuCursorTexture, menuCursorHotspot, CursorMode.Auto);
         // Не закрываем панель здесь, это делает PlayerMenuScript.OpenPanel()
     }
 
@@ -84,6 +91,7 @@ public class UIStateManager : MonoBehaviour
         currentState = UIMode.Gameplay;
         Time.timeScale = 1f;
         Cursor.visible = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         
         if (playerMenu != null)
         {
@@ -95,7 +103,10 @@ public class UIStateManager : MonoBehaviour
     {
         currentState = UIMode.PauseMenu;
         Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        if (menuCursorTexture != null)
+            Cursor.SetCursor(menuCursorTexture, menuCursorHotspot, CursorMode.Auto);
         playerInteraction?.HideInteractIcon();
     }
 
@@ -104,6 +115,7 @@ public class UIStateManager : MonoBehaviour
         currentState = UIMode.Gameplay;
         Time.timeScale = 1f;
         Cursor.visible = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     public bool CanInteract() => currentState == UIMode.Gameplay;

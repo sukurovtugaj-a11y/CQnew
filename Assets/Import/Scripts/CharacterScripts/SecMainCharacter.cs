@@ -80,6 +80,7 @@ public class SecMainCharacter : MonoBehaviour
     internal float normalColliderHeight;
     internal bool isSliding;
     internal int noSlideCount;
+    internal int noJumpCount;
     internal float noSlideCooldown;
     public bool CanSlide => noSlideCount <= 0 && noSlideCooldown <= 0;
     internal string slideType;
