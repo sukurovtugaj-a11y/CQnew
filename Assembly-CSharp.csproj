@@ -117,6 +117,7 @@
     <Compile Include="Assets\Import\Scripts\Levels\SlideZone.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\InvulnerabilityTimer.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\GameProgressManager.cs" />
+    <Compile Include="Assets\Import\Scripts\UI\TerminalStatusUI.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\SlideDamageHandler.cs" />
     <Compile Include="Assets\Import\Scripts\UI\TerminalMenu.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\VoiceAndSoundTrigger.cs" />

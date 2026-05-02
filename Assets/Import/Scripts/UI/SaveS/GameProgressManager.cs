@@ -33,6 +33,8 @@ public class GameProgressManager : MonoBehaviour
         Save();
     }
 
+    public string GetSlotName() => data.slotName;
+
     public bool IsGameStarted() => data.gameStarted;
 
     public void OnFirstMove()
@@ -193,6 +195,20 @@ public class GameProgressManager : MonoBehaviour
     }
 
     public bool IsIntroWatched() => data.introVideoWatched;
+
+    public bool IsVideoWatched(string level)
+    {
+        return level switch
+        {
+            "Intro" => data.introVideoWatched,
+            "UDontDrUCrIt" => data.uDontDrUCrItVideoWatched,
+            "TrainL" => data.trainVideoWatched,
+            "L1" => data.l1VideoWatched,
+            "L2" => data.l2VideoWatched,
+            "L3" => data.l3VideoWatched,
+            _ => false
+        };
+    }
     
     public bool IsVoiceoverPlayed() => data.voiceoverPlayed;
     
