@@ -51,28 +51,26 @@ public class SceneTeleportZone : MonoBehaviour
     {
         SpawnPointManager.LastHealth = health;
 
+        // Очищаем предыдущие данные спавна перед установкой новых
         var spawnManager = FindObjectOfType<SpawnPointManager>();
         if (spawnManager != null)
         {
-            spawnManager.spawnPosition = spawnPosition;
-            spawnManager.setDirection = changeDirection;
-            spawnManager.lookRight = lookRight;
-            spawnManager.hasSpawnData = true;
-            spawnManager.lockControls = lockControlsOnEnter;
-            spawnManager.lockDuration = lockDuration;
+            spawnManager.hasSpawnData = false; // Сбрасываем старые данные
         }
         else
         {
             GameObject managerObj = new GameObject("SpawnPointManager");
             spawnManager = managerObj.AddComponent<SpawnPointManager>();
             DontDestroyOnLoad(managerObj);
-            spawnManager.spawnPosition = spawnPosition;
-            spawnManager.setDirection = changeDirection;
-            spawnManager.lookRight = lookRight;
-            spawnManager.hasSpawnData = true;
-            spawnManager.lockControls = lockControlsOnEnter;
-            spawnManager.lockDuration = lockDuration;
         }
+
+        // Устанавливаем новые данные ТОЛЬКО для целевой сцены
+        spawnManager.spawnPosition = spawnPosition;
+        spawnManager.setDirection = changeDirection;
+        spawnManager.lookRight = lookRight;
+        spawnManager.hasSpawnData = true;
+        spawnManager.lockControls = lockControlsOnEnter;
+        spawnManager.lockDuration = lockDuration;
 
         if (isFinishLevel)
         {

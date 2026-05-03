@@ -12,17 +12,49 @@ public class Sollers : MonoBehaviour
     [Tooltip("Задержка между регистрацией касаний (секунды)")]
     public float cooldown = 0.5f;
 
+    [Tooltip("Радиус обнаружения игрока (для скольжения и даша)")]
+    public float checkRadius = 1.5f;
+
     [Header("Звук")]
     public AudioSource hitSound;
 
     private int hitCount;
     private float lastHitTime = -999f;
+    private Collider2D sollersCollider;
+
+    private void Start()
+    {
+        sollersCollider = GetComponent<Collider2D>();
+        if (sollersCollider != null)
+        {
+            // Увеличиваем радиус проверки, чтобы учесть размер Soller'а
+            checkRadius = Mathf.Max(checkRadius, sollersCollider.bounds.extents.magnitude);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // Проверяем игроков в радиусе, даже если их коллайдер отключен (скольжение)
+        var players = Physics2D.OverlapCircleAll(transform.position, checkRadius, LayerMask.GetMask("Player"));
+        foreach (var hit in players)
+        {
+            var player = hit.GetComponent<SecMainCharacter>();
+            if (player != null)
+            {
+                RegisterHit(player);
+            }
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         var player = other.GetComponent<SecMainCharacter>();
         if (player == null) return;
+        RegisterHit(player);
+    }
 
+    public void RegisterHit(SecMainCharacter player)
+    {
         if (Time.time - lastHitTime < cooldown) return;
 
         lastHitTime = Time.time;

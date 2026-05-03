@@ -33,21 +33,31 @@ public class SceneController : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName != "MainMenu" && sceneName != "MainMenuNAD" && sceneName != "Prestart" && sceneName != "VideoScene" && sceneName != "Upgrades")
         {
-            SpawnPointManager.forceLookRight = true;
             var inst = Instantiate(playerPrefab, Vector3.zero, Quaternion.Euler(0, 0, 0), null);
 
             var sec = inst.GetComponent<SecMainCharacter>();
             if (sec != null)
             {
                 sec.OnStart(this);
-                if (SpawnPointManager.Instance != null)
-                    SpawnPointManager.Instance.ApplySpawnPointToSec(sec);
-                if (SpawnPointManager.forceLookRight && SceneManager.GetActiveScene().name != "MainScene")
+
+                // Применяем данные спавна, если они есть
+                bool hasSpawnData = SpawnPointManager.Instance != null && SpawnPointManager.Instance.hasSpawnData;
+                
+                if (hasSpawnData)
                 {
-                    var scale = inst.transform.localScale;
-                    scale.x = -Mathf.Abs(scale.x);
-                    inst.transform.localScale = scale;
-                    SpawnPointManager.forceLookRight = false;
+                    // SpawnPointManager сам разберётся: менять направление или нет (по setDirection)
+                    SpawnPointManager.Instance.ApplySpawnPointToSec(sec);
+                }
+                else
+                {
+                    // НЕТ данных спавна (переход из хаба на уровень)
+                    // По умолчанию на уровнях смотрим направо (кроме MainScene - хаб)
+                    if (sceneName != "MainScene")
+                    {
+                        var scale = inst.transform.localScale;
+                        scale.x = -Mathf.Abs(scale.x); // Смотрим направо
+                        inst.transform.localScale = scale;
+                    }
                 }
             }
         }

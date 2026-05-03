@@ -66,8 +66,10 @@ public class PlayerDashTeleportComponent
         Vector2 startPos = rb.position;
         Vector2 direction = new Vector2(dir, 0);
 
+        // Проверяем Sollers на пути даша
         RaycastHit2D hit = Physics2D.Raycast(startPos, direction, owner.dashDistance,
             LayerMask.GetMask("Ground", "Platform"));
+        RaycastHit2D sollersHit = Physics2D.Raycast(startPos, direction, owner.dashDistance);
 
         float actualDistance = owner.dashDistance;
         if (hit.collider != null && hit.distance > 0.1f)
@@ -76,14 +78,36 @@ public class PlayerDashTeleportComponent
             if (actualDistance < 0.1f) actualDistance = 0.1f;
         }
 
+        // Если на пути Sollers — запоминаем его для обработки во время движения
+        Sollers targetSollers = null;
+        if (sollersHit.collider != null)
+        {
+            targetSollers = sollersHit.collider.GetComponentInParent<Sollers>();
+        }
+
         Vector2 targetPos = startPos + direction * actualDistance;
         float elapsed = 0f;
         float savedYVel = rb.velocity.y;
+        bool sollersHitApplied = false;
 
         while (elapsed < owner.dashDuration)
         {
             elapsed += Time.deltaTime;
-            rb.MovePosition(Vector2.Lerp(startPos, targetPos, elapsed / owner.dashDuration));
+            Vector2 newPos = Vector2.Lerp(startPos, targetPos, elapsed / owner.dashDuration);
+            
+            // Проверяем, не проскочили ли мы Sollers (проверка дистанции и пересечения линии)
+            if (targetSollers != null && !sollersHitApplied)
+            {
+                float distToSollers = Vector2.Distance(newPos, targetSollers.transform.position);
+                // Проверяем, находится ли игрок внутри или рядом с Sollers
+                if (distToSollers < targetSollers.checkRadius)
+                {
+                    targetSollers.RegisterHit(owner);
+                    sollersHitApplied = true;
+                }
+            }
+
+            rb.MovePosition(newPos);
             rb.velocity = new Vector2(0, savedYVel);
             yield return null;
         }
