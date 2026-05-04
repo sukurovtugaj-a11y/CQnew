@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &107762420
@@ -6196,7 +6196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &191499756
@@ -6440,7 +6440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1001 &200298019
@@ -8842,7 +8842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1001 &323483853
@@ -10132,7 +10132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1001 &376736228
@@ -13505,7 +13505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &497409501
@@ -13598,7 +13598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19942b4018dc5e74f944f0282e9049ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeValue: 10
+  TimeValue: 200
 --- !u!1001 &497964766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14906,7 +14906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &550629311
@@ -15553,7 +15553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &565467312
@@ -16230,7 +16230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &580182269
@@ -17536,7 +17536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &634687551
@@ -20825,7 +20825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &762713335
@@ -21304,7 +21304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1001 &779709317
@@ -23311,7 +23311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!114 &826541020
@@ -25523,7 +25523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &913207572
@@ -28611,7 +28611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1069949427
@@ -29911,7 +29911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1111660954
@@ -36427,7 +36427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1330310383
@@ -38429,7 +38429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1399441023
@@ -40049,7 +40049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1441423312
@@ -40955,7 +40955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1478962877
@@ -43896,7 +43896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1608042319
@@ -45956,7 +45956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1684696926
@@ -47633,7 +47633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1770732790
@@ -48045,7 +48045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1785985986
@@ -48205,7 +48205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1786499788
@@ -48449,7 +48449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1799030424
@@ -48989,7 +48989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!68 &1808249003
@@ -51947,7 +51947,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &1922718937
@@ -54604,7 +54604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1001 &2000196164
@@ -56544,7 +56544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 0}
-  damage: 100
+  damage: 1000
   oneTimeDamage: 1
   controlLockDuration: 0.5
 --- !u!1 &2067492295

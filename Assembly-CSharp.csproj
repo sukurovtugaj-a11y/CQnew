@@ -66,10 +66,13 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\JumpAbilityData.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\TriggerObjectDisabler.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SettingsMenu.cs" />
+    <Compile Include="Assets\Enemies\Scripts\Projectile.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerHealthComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSlideComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SideLauncher.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyCHAR.cs" />
     <Compile Include="Assets\Import\NAD\Timer.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyINT.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\WokySignalLight.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UIStateManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerCheckpointComponent.cs" />
@@ -85,18 +88,22 @@
     <Compile Include="Assets\Import\Scripts\Levels\PortalTrainGate.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\NoSlideZone.cs" />
     <Compile Include="Assets\Import\Scripts\Enemies\AIcontroller.cs" />
+    <Compile Include="Assets\Enemies\Scripts\ActionProvider.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\CarTrigger.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\PanelManagerVoice.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\SpawnPointManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportZone.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\Trampoline.cs" />
+    <Compile Include="Assets\Enemies\Scripts\IdleEnemy.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\PanelManagerBlocker.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\ManualCheckpoint.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerUpgradeComponent.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\TrapDamageZone.cs" />
+    <Compile Include="Assets\Enemies\Hero Knight - Pixel Art\Demo\Sensor_HeroKnight.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MainMenuCursor.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerAchievementComponent.cs" />
     <Compile Include="Assets\Import\Scripts\SettingsCore.cs" />
+    <Compile Include="Assets\Import\Scripts\UI\PanelFader.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UpgradeManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SequentialAudioPlayer.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerMovementComponent.cs" />
@@ -111,14 +118,19 @@
     <Compile Include="Assets\Import\Scripts\Levels\OPollMover.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\ZoneSoundTrigger.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PuzzlesScripts\PuzzleUI.cs" />
+    <Compile Include="Assets\Enemies\Scripts\HP.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Horizontal.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\SaveSlotManager.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemySTRING.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Checkpoint.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\PlatformToggle.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SlideZone.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyFLOAT.cs" />
+    <Compile Include="Assets\Enemies\Hero Knight - Pixel Art\Demo\HeroKnight.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\InvulnerabilityTimer.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SaveS\GameProgressManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\TerminalStatusUI.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyBOOL.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\SlideDamageHandler.cs" />
     <Compile Include="Assets\Import\Scripts\UI\TerminalMenu.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\VoiceAndSoundTrigger.cs" />
@@ -132,12 +144,19 @@
     <Compile Include="Assets\Import\Scripts\Levels\MovingPlatform_Vertical.cs" />
     <Compile Include="Assets\Import\Scripts\SceneController.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\InterativeController.cs" />
+    <Compile Include="Assets\Enemies\Scripts\Gun.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyDOUBLE.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\NoJumpSlideZone.cs" />
+    <Compile Include="Assets\Enemies\Scripts\HPBar.cs" />
     <Compile Include="Assets\Import\Scripts\RainCameraFollower.cs" />
+    <Compile Include="Assets\Enemies\Scripts\DamageSource.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PlayerMenuScript.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerDashTeleportComponent.cs" />
+    <Compile Include="Assets\Enemies\Hero Knight - Pixel Art\ColorSwap\ColorSwap_HeroKnight.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerJumpComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\CooldownTimer.cs" />
+    <Compile Include="Assets\Enemies\Hero Knight - Pixel Art\Demo\DestroyEvent_HeroKnight.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemy.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\SoundVoiceTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +174,7 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\Enemies\_READ ME.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
@@ -162,6 +182,7 @@
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\Enemies\Hero Knight - Pixel Art\ColorSwap\Sprites-ColorSwap.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
