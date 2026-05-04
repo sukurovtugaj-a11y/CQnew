@@ -9870,8 +9870,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278234878
+  m_fontColor: {r: 0.9960785, g: 0.68235296, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -15191,7 +15191,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 2
   delayBeforeAttack: 0.5
-  minRangeToAttack: 8
+  detectionRadius: 20
+  clubDistance: 4.5
   moveSpeed: 8
   stopingDistance: 3
   commantText: {fileID: 5637445275627584877}
@@ -15414,11 +15415,11 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3462292360623133451}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -15533,7 +15534,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0, g: 0.6556065, b: 1, a: 1}
-      key1: {r: 0, g: 0.015245914, b: 1, a: 0.21568628}
+      key1: {r: 0, g: 0.015245914, b: 1, a: 0.73333335}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -16065,8 +16066,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278234878
+  m_fontColor: {r: 0.9960785, g: 0.68235296, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16225,7 +16226,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0, g: 0.6556065, b: 1, a: 1}
-      key1: {r: 0, g: 0.015245914, b: 1, a: 0.21568628}
+      key1: {r: 0, g: 0.015245914, b: 1, a: 0.6039216}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -16256,7 +16257,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 1, y: 5}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -26420,7 +26421,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0, g: 0.6556065, b: 1, a: 1}
-      key1: {r: 0, g: 0.015245914, b: 1, a: 0.21568628}
+      key1: {r: 0, g: 0.015245914, b: 1, a: 0.73333335}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -36350,7 +36351,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0, g: 0.6556065, b: 1, a: 1}
-      key1: {r: 0, g: 0.015245914, b: 1, a: 0.21568628}
+      key1: {r: 0, g: 0.015245914, b: 1, a: 0.7490196}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

@@ -3,136 +3,200 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class AngerEnemyDOUBLE : AngerEnemy
 {
-	public float timeToAim;
-	public float attackCooldown;
-	public float delayBeforeAttack;
-	public float minRangeToAttack;
-	public float moveSpeed;
-	public float stopingDistance;
-	public float fireAttackMinRange = 12;
-	public float chargeStopingDistance;
-	public TextMeshProUGUI commantText;
-	public Animator animator;
-	public HP hp;
-	public GameObject floatPrefab;
-	public Transform floatPrefabSpawnPoint;
-	public GameObject explosionVFX;
-	public Transform lazerGun;
+    [Header("Дистанции атак")]
+    public float fireRange = 7.5f;      // Огнемёт: < 7.5м (ПРИОРИТЕТ 1)
+    public float laserMaxRange = 17f;   // Лазер: 7.5м - 17м (ПРИОРИТЕТ 2)
+    public float chargeMinRange = 17f;  // Таран: > 17м (ПРИОРИТЕТ 3)
 
-	private float lowHPLevel = 0;
-	private float lastAttackTime;
-	private float sqrtMinRangeToAttack;
-	private float sqrtStopingDistance;
-	private float sqrtFireAttackMinRange;
+    [Header("Настройки")]
+    public float moveSpeed = 5f;
+    public float aggroRadius = 20f;     // Максимальный радиус агро
+    public float attackCooldown = 2f;
+    public float timeToAim = 5f;
+    public float delayBeforeAttack = 0.5f;
+    public float chargeStopingDistance = 2f;
+    public float knockbackDistance = 1.5f;
 
-	private void Start()
-	{
-		sqrtMinRangeToAttack = minRangeToAttack * minRangeToAttack;
-		sqrtStopingDistance = stopingDistance * stopingDistance;
-		sqrtFireAttackMinRange = fireAttackMinRange * fireAttackMinRange;
+    [Header("Ссылки")]
+    public TextMeshProUGUI commantText;
+    public Animator animator;
+    public HP hp;
+    public GameObject floatPrefab;
+    public Transform floatPrefabSpawnPoint;
+    public GameObject explosionVFX;
+    public Transform lazerGun;
 
-		lowHPLevel = hp.maxHP * 0.3f;
-		hp.onChangeHp.AddListener(LowHPCheck);
-	}
+    private Rigidbody2D rb;
+    private float lastFireTime;
+    private float lastLaserTime;
+    private float lastChargeTime;
+    private float lowHPLevel;
 
-	public void LowHPCheck(float currentHP)
-	{
-		if(currentHP <= lowHPLevel)
-		{
-			Instantiate(floatPrefab, floatPrefabSpawnPoint.position, Quaternion.identity);
-			Instantiate(explosionVFX, transform.position, Quaternion.identity);
+    // Флаги блокировки (только для защиты от повторного запуска внутри атаки)
+    private bool isCharging = false;
+    private bool isAiming = false;
 
-			Destroy(this.gameObject);
-		}
-	}
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        lowHPLevel = hp.maxHP * 0.3f;
+        hp.onChangeHp.AddListener(LowHPCheck);
 
-	private void Update()
-	{
-		float sqrtRange = Vector3.SqrMagnitude(target.position - (transform.position + Vector3.up * 2));
+        lastFireTime = -100f;
+        lastLaserTime = -100f;
+        lastChargeTime = -100f;
+    }
 
-		if (sqrtRange > sqrtStopingDistance)
-		{
-			float speedScale = 1;
-			if (target.position.x < transform.position.x)
-				speedScale = -1;
+    public void LowHPCheck(float currentHP)
+    {
+        if (currentHP <= lowHPLevel)
+        {
+            Instantiate(floatPrefab, floatPrefabSpawnPoint.position, Quaternion.identity);
+            Instantiate(explosionVFX, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
 
-			transform.position += speedScale * moveSpeed * Time.deltaTime * Vector3.right;
-		}
+    private void Update()
+    {
+        if (target == null) return;
 
-		if (Time.time - lastAttackTime < attackCooldown)
-			return;
+        // Считаем дистанцию (с тем же смещением, что и было, для консистентности)
+        float distance = Vector3.Distance(target.position, (transform.position + Vector3.up * 2));
 
-		lastAttackTime = Time.time;
+        // Если игрок слишком далеко — просто идём к нему, не атакуем
+        if (distance > aggroRadius)
+        {
+            MoveTowards(target.position);
+            return;
+        }
 
-		if (sqrtRange > sqrtMinRangeToAttack)
-			StartCoroutine(AttackCharge());
-		else if (sqrtRange < sqrtFireAttackMinRange)
-			AttackFire();
-		else
-			StartCoroutine(AttackLazer());
-	}
-	private IEnumerator AttackCharge()
-	{
-		Vector3 moveVector = Vector3.right;
-		if (target.position.x < transform.position.x)
-		{
-			commantText.text = "8.7";
-			moveVector = Vector3.left;
-		}
-		else
-			commantText.text = "14.95";
+        // === ПРИОРИТЕТ 1: ОГНЕМЁТ (< 7.5м) ===
+        if (distance < fireRange)
+        {
+            // Сбрасываем флаги, чтобы выйти из других атак, если игрок резко подошёл
+            isCharging = false;
+            isAiming = false;
 
-		Vector3 a = transform.position;
-		Vector3 b;
+            if (Time.time - lastFireTime >= attackCooldown)
+            {
+                lastFireTime = Time.time;
+                AttackFire();
+            }
+            // НЕ делаем return — если огнемёт на КД, даём шанс другим приоритетам
+        }
+        // === ПРИОРИТЕТ 2: ЛАЗЕР (7.5м - 17м) ===
+        else if (distance <= laserMaxRange)
+        {
+            if (!isAiming && Time.time - lastLaserTime >= attackCooldown)
+            {
+                lastLaserTime = Time.time;
+                isAiming = true; // Блокируем ПЕРЕЗАПУСК, но не весь Update
+                StartCoroutine(AttackLazer());
+            }
+            // Если лазер на КД или уже стреляем — просто стоим (MoveTowards не вызываем)
+        }
+        // === ПРИОРИТЕТ 3: ТАРАН (> 17м) ===
+        else
+        {
+            if (!isCharging && Time.time - lastChargeTime >= attackCooldown)
+            {
+                lastChargeTime = Time.time;
+                StartCoroutine(AttackCharge());
+            }
+            else
+            {
+                // Если таран на КД или уже бежим — просто догоняем
+                MoveTowards(target.position);
+            }
+        }
+    }
 
-		for (float t = 0; t < 1; t += (Time.deltaTime * 2 + Time.deltaTime * 2 * t))
-		{
-			b = target.position - moveVector * chargeStopingDistance;
-			b.y = a.y;
-			transform.position = Vector3.Lerp(a,b,t);
+    private void MoveTowards(Vector3 targetPos)
+    {
+        float speedScale = (targetPos.x < transform.position.x) ? -1f : 1f;
+        Vector2 newPos = rb.position + new Vector2(speedScale * moveSpeed * Time.deltaTime, 0f);
+        rb.MovePosition(newPos);
+    }
 
-			yield return null;
-		}
+    private IEnumerator AttackCharge()
+    {
+        isCharging = true;
+        Vector3 moveVector = Vector3.right;
+        if (target.position.x < transform.position.x)
+        {
+            commantText.text = "8.7";
+            moveVector = Vector3.left;
+        }
+        else
+            commantText.text = "14.95";
 
-		transform.position = target.position - moveVector * chargeStopingDistance;
-	}
+        Vector3 startPos = transform.position;
+        Vector3 endPos = target.position - moveVector * chargeStopingDistance;
+        endPos.y = startPos.y;
 
-	private IEnumerator AttackLazer()
-	{
-		commantText.text = "6.875";
+        // Разгон к игроку (через rb.MovePosition для физики)
+        for (float t = 0; t < 1; t += Time.deltaTime * 2f)
+        {
+            Vector3 lerpPos = Vector3.Lerp(startPos, endPos, t);
+            rb.MovePosition(lerpPos);
+            yield return null;
+        }
 
-		Vector2 direction;
-		float targetAngle;
-		float startAngle = lazerGun.eulerAngles.z;
+        // Откат после удара
+        Vector3 knockbackEnd = transform.position + moveVector * knockbackDistance;
+        for (float t = 0; t < 1; t += Time.deltaTime * 3f)
+        {
+            Vector3 lerpPos = Vector3.Lerp(endPos, knockbackEnd, t);
+            rb.MovePosition(lerpPos);
+            yield return null;
+        }
 
-		for (float t = 0; t < 1; t += Time.deltaTime / timeToAim)
-		{
-			direction = target.position - lazerGun.position + Vector3.up;
-			targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
-			float currentAngle = Mathf.LerpAngle(startAngle, targetAngle, t);
-			lazerGun.rotation = Quaternion.Euler(0, 0, currentAngle);
+        isCharging = false;
+    }
 
-			yield return null;
-		}
+    private IEnumerator AttackLazer()
+    {
+        commantText.text = "6.875";
 
-		direction = target.position - lazerGun.position + Vector3.up;
-		targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
-		lazerGun.rotation = Quaternion.Euler(0, 0, targetAngle);
+        Vector2 direction;
+        float targetAngle;
+        float startAngle = lazerGun.eulerAngles.z;
 
-		StartCoroutine(DelayedAnimatorTrigger("lazer", delayBeforeAttack));
-	}
+        // Прицеливание: враг НЕ двигается (isAiming = true блокирует перезапуск)
+        for (float t = 0; t < 1; t += Time.deltaTime / timeToAim)
+        {
+            direction = target.position - lazerGun.position + Vector3.up;
+            targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+            float currentAngle = Mathf.LerpAngle(startAngle, targetAngle, t);
+            lazerGun.rotation = Quaternion.Euler(0, 0, currentAngle);
+            yield return null;
+        }
 
-	private void AttackFire()
-	{
-		commantText.text = "1";
-		StartCoroutine(DelayedAnimatorTrigger("fire", delayBeforeAttack));
-	}
+        // Финальный выстрел
+        direction = target.position - lazerGun.position + Vector3.up;
+        targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+        lazerGun.rotation = Quaternion.Euler(0, 0, targetAngle);
 
-	private IEnumerator DelayedAnimatorTrigger(string trigger, float delay)
-	{
-		yield return new WaitForSeconds(delay);
-		animator.SetTrigger(trigger);
-	}
+        StartCoroutine(DelayedAnimatorTrigger("lazer", delayBeforeAttack));
+
+        // Снимаем блокировку только после завершения всей логики
+        yield return new WaitForSeconds(delayBeforeAttack);
+        isAiming = false;
+    }
+
+    private void AttackFire()
+    {
+        commantText.text = "1";
+        StartCoroutine(DelayedAnimatorTrigger("fire", delayBeforeAttack));
+    }
+
+    private IEnumerator DelayedAnimatorTrigger(string trigger, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetTrigger(trigger);
+    }
 }
