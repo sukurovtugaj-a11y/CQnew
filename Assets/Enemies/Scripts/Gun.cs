@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-	public Vector3 flyVector = Vector3.zero;
-	public Projectile projectilePrefab;
+    public Vector3 flyVector = Vector3.zero;
+    public Projectile projectilePrefab;
 
-	public void Shoot()
-	{
-		Instantiate(projectilePrefab, transform.position, Quaternion.identity).SetFlyVector(flyVector);
-	}
+    [Header("Звук")]
+    public AudioSource shootAudioSource;  // Одно поле для звука выстрела 
 
-	public void Shoot(Vector3 targetPoint)
-	{
-		Projectile proj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-		
+    public void Shoot()
+    {
+        // Воспроизводим звук перед созданием пули
+        if (shootAudioSource != null)
+            shootAudioSource.Play();
 
-		proj.StartCoroutine(proj.GoToTarget(targetPoint + (targetPoint - transform.position)));
-	}
+        Instantiate(projectilePrefab, transform.position, Quaternion.identity).SetFlyVector(flyVector);
+    }
+
+    public void Shoot(Vector3 targetPoint)
+    {
+        // Воспроизводим звук перед созданием пули
+        if (shootAudioSource != null)
+            shootAudioSource.Play();
+
+        Projectile proj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+        proj.StartCoroutine(proj.GoToTarget(targetPoint + (targetPoint - transform.position)));
+    }
 }

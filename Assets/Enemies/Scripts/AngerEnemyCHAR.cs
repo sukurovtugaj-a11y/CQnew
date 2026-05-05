@@ -1,160 +1,191 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class AngerEnemyCHAR : AngerEnemy
 {
-	public LineRenderer line;
-	public float attackCooldown;
-	public float delayBeforeAttack;
-	public float minRangeToAttack;
-	public float moveSpeed;
-	public Animator animator;
-	public float stopingDistance;
-	public float chargeDamage;
-	public float chargeStopingDistance;
-	public GameObject explosionVFX;
-	public Gun gun;
-	public Vector3[] pointsO;
-	public Vector3[] pointsB;
+    [Header("Дистанции")]
+    public float chargeRange = 12f;
+    public float aggroRadius = 20f;
 
-	private Vector3[] pointsI = new Vector3[10];
-	private float lastAttackTime;
-	private float sqrtMinRangeToAttack;
-	private float sqrtStopingDistance;
-	private bool onCharge = false;
+    [Header("Настройки")]
+    public float attackCooldown = 2f;
+    public float moveSpeed = 4f;
+    public float chargeDamage = 2f;
+    public float chargeStopingDistance = 2f;
 
-	private void Start()
-	{
-		sqrtMinRangeToAttack = minRangeToAttack * minRangeToAttack;
-		sqrtStopingDistance = stopingDistance * stopingDistance;
+    [Header("Ссылки")]
+    public LineRenderer line;
+    public Animator animator;
+    public Gun gun;
+    public Vector3[] pointsO;
+    public Vector3[] pointsB;
+    public Vector3[] pointsI;
 
-		line.GetPositions(pointsI);
-	}
+    [Header("Физика")]
+    public Rigidbody2D rb;
 
-	private void Update()
-	{
-		if (onCharge)
-			return;
+    private float lastAttackTime;
+    private bool onCharge = false;
+    private Vector3 basePosition;
 
-		//if (target == null)
-		//	return;
+    private void Start()
+    {
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
 
-		float sqrtRange = Vector3.SqrMagnitude(target.position - transform.position);
+        // ВАЖНО: LineRenderer должен быть в локальных координатах, чтобы масштаб работал
+        if (line != null) line.useWorldSpace = false;
 
-		if (sqrtRange > sqrtStopingDistance)
-		{
-			float speedScale = 1;
-			if (target.position.x < transform.position.x)
-				speedScale = -1;
+        if (pointsI == null || pointsI.Length == 0)
+        {
+            if (line != null)
+            {
+                pointsI = new Vector3[line.positionCount];
+                line.GetPositions(pointsI);
+            }
+        }
+        lastAttackTime = -100f;
+        basePosition = transform.position;
 
-			transform.position += speedScale * moveSpeed * Time.deltaTime * Vector3.right;
-		}
+        // Сразу смотрим в сторону игрока при старте
+        FaceTarget();
+    }
 
-		if (Time.time - lastAttackTime < attackCooldown)
-			return;
+    private void Update()
+    {
+        if (target == null) return;
 
-		lastAttackTime = Time.time;
+        // Разворот каждый кадр (работает для LineRenderer)
+        FaceTarget();
 
-		if (sqrtRange > sqrtMinRangeToAttack)
-			StartCoroutine(AttackCharge());
-		else
-		{
-			if(transform.position.x < target.position.x)
-				StartCoroutine(AttackGun());
-			else
-				StartCoroutine(AttackFly());
-		}
-	}
+        if (onCharge) return;
 
-	private IEnumerator AttackCharge()
-	{
-		onCharge = true;
-		yield return StartCoroutine(GoToForm(pointsO));
+        float distance = Vector3.Distance(target.position, transform.position);
+        basePosition = transform.position;
 
+        if (distance > aggroRadius)
+        {
+            MoveTowards(target.position);
+            return;
+        }
 
-		float animSpeed = 1;
-		if (target.position.x > transform.position.x)
-			animSpeed = -1;
+        if (distance > chargeRange)
+        {
+            if (Time.time - lastAttackTime >= attackCooldown)
+            {
+                lastAttackTime = Time.time;
+                StartCoroutine(AttackCharge());
+            }
+            else
+            {
+                MoveTowards(target.position);
+            }
+            return;
+        }
 
-		animator.SetFloat("rotation speed", animSpeed);
-		animator.SetBool("rotation", true);
-		yield return StartCoroutine(ChargeToTarget());  
-		animator.SetBool("rotation", false);
-		target.GetComponent<HP>().TakeDamage(chargeDamage, this.gameObject);
+        if (Time.time - lastAttackTime >= attackCooldown)
+        {
+            lastAttackTime = Time.time;
+            StartCoroutine(AttackGun());
+        }
+        else
+        {
+            MoveTowards(target.position);
+        }
+    }
 
-		yield return StartCoroutine(GoToForm(pointsI));
-		onCharge = false;
-	}
+    /// <summary>
+    /// Разворот LineRenderer влево/вправо
+    /// </summary>
+    private void FaceTarget()
+    {
+        if (target == null) return;
+        // 1 = вправо, -1 = влево. Избегаем 0, чтобы не схлопнуть объект
+        float dir = target.position.x >= transform.position.x ? 1f : -1f;
+        transform.localScale = new Vector3(dir, 1, 1);
+    }
 
-	private IEnumerator AttackGun()
-	{
-		onCharge = true;
-		yield return StartCoroutine(GoToForm(pointsB));
+    private void MoveTowards(Vector3 targetPos)
+    {
+        float direction = Mathf.Sign(targetPos.x - transform.position.x);
+        basePosition += direction * moveSpeed * Time.deltaTime * Vector3.right;
+        if (rb != null) rb.MovePosition(basePosition);
+        else transform.position = basePosition;
+    }
 
-		yield return new WaitForSeconds(0.5f);
-		gun.Shoot(target.position + Vector3.up);
+    private IEnumerator AttackCharge()
+    {
+        onCharge = true;
+        FaceTarget();
 
-		yield return StartCoroutine(GoToForm(pointsI));
-		onCharge = false;
-		lastAttackTime = Time.time;
-	}
+        if (line != null && pointsO != null)
+            yield return StartCoroutine(GoToForm(pointsO));
 
-	private IEnumerator AttackFly()
-	{
-		onCharge = true;
-		animator.SetTrigger("ZH");
-		yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(ChargeToTarget());
 
-		yield return StartCoroutine(ChargeToTarget());
-		target.GetComponent<HP>().TakeDamage(chargeDamage, this.gameObject);
+        if (target != null && target.TryGetComponent<HP>(out HP hp))
+            hp.TakeDamage(chargeDamage, this.gameObject);
 
-		yield return StartCoroutine(GoToForm(pointsI));
-		animator.SetTrigger("ZH reverce");
-		onCharge = false;
-		lastAttackTime = Time.time;
-	}
+        if (line != null && pointsI != null)
+            yield return StartCoroutine(GoToForm(pointsI));
 
-	private IEnumerator ChargeToTarget()
-	{
-		Vector3 moveVector = Vector3.right;
-		if (target.position.x < transform.position.x)
-			moveVector = Vector3.left;
+        onCharge = false;
+    }
 
-		Vector3 a = transform.position;
-		Vector3 b;
+    private IEnumerator AttackGun()
+    {
+        onCharge = true;
+        FaceTarget();
 
-		for (float t = 0; t < 1; t += (Time.deltaTime * 2 + Time.deltaTime * 2 * t))
-		{
-			b = target.position - moveVector * chargeStopingDistance;
-			b.y = a.y;
-			transform.position = Vector3.Lerp(a, b, t);
+        if (line != null && pointsB != null)
+            yield return StartCoroutine(GoToForm(pointsB));
 
-			yield return null;
-		}
+        yield return new WaitForSeconds(0.5f);
 
-		transform.position = target.position - moveVector * chargeStopingDistance;
-		lastAttackTime = Time.time;
-	}
+        if (gun != null && target != null)
+        {
+            gun.Shoot(target.position + Vector3.up);
+        }
 
-	private IEnumerator GoToForm(Vector3[] targetForm)
-	{
-		int pointsCount = line.positionCount;
-		Vector3[] pointsA = new Vector3[pointsCount];
-		line.GetPositions(pointsA);
-		Vector3[] pointsB = new Vector3[pointsCount];
+        if (line != null && pointsI != null)
+            yield return StartCoroutine(GoToForm(pointsI));
 
-		for (float t = 0; t < 1; t += Time.deltaTime * 2)
-		{
-			for (int i = 0; i < pointsCount; i++)
-				pointsB[i] = Vector3.Lerp(pointsA[i], targetForm[i], t);
+        onCharge = false;
+    }
 
-			line.SetPositions(pointsB);
+    private IEnumerator ChargeToTarget()
+    {
+        if (target == null) yield break;
 
-			yield return null;
-		}
+        Vector3 moveDir = (target.position.x < transform.position.x) ? Vector3.left : Vector3.right;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = target.position - moveDir * chargeStopingDistance;
+        endPos.y = startPos.y;
 
-		line.SetPositions(targetForm);
-	}
+        for (float t = 0; t < 1; t += Time.deltaTime * 2f)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+            yield return null;
+        }
+        transform.position = endPos;
+    }
+
+    private IEnumerator GoToForm(Vector3[] targetForm)
+    {
+        if (line == null || targetForm == null) yield break;
+
+        int count = line.positionCount;
+        Vector3[] current = new Vector3[count];
+        line.GetPositions(current);
+
+        for (float t = 0; t < 1; t += Time.deltaTime * 2f)
+        {
+            for (int i = 0; i < count; i++)
+                current[i] = Vector3.Lerp(current[i], targetForm[i], t);
+            line.SetPositions(current);
+            yield return null;
+        }
+        line.SetPositions(targetForm);
+    }
 }

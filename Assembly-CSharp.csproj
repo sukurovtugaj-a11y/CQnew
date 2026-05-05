@@ -82,6 +82,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\SecMainCharacter.cs" />
     <Compile Include="Assets\Import\NAD\MainMenuNADCursor.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuOpener.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyNewChar.cs" />
     <Compile Include="Assets\Import\Scripts\UI\CursorManager.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerSoundComponent.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MyButton.cs" />

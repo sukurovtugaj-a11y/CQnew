@@ -476,7 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf6246fd3d10744863b17535450699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 15
+  knockbackDistance: 1
   work: 1
   playerOnly: 1
 --- !u!1 &2028450775855115782
@@ -5749,7 +5750,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf6246fd3d10744863b17535450699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 20
+  knockbackDistance: 1
   work: 0
   playerOnly: 1
 --- !u!1 &3564419173794819976
@@ -10929,7 +10931,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf6246fd3d10744863b17535450699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 20
+  knockbackDistance: 1
   work: 0
   playerOnly: 1
 --- !u!1 &5301028032786582655
@@ -11075,7 +11078,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf6246fd3d10744863b17535450699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 15
+  knockbackDistance: 1
   work: 1
   playerOnly: 1
 --- !u!1 &5617299897472255409
@@ -11259,7 +11263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ccf6246fd3d10744863b17535450699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 10
+  knockbackDistance: 1
   work: 0
   playerOnly: 1
 --- !u!61 &7255200881816562143

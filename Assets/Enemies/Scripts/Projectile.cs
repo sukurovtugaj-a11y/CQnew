@@ -41,21 +41,38 @@ public class Projectile : MonoBehaviour
 		transform.position += flyVector * Time.deltaTime;
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.gameObject.TryGetComponent<HP>(out HP victim))
-		{
-			if (!playerOnly || collision.gameObject.CompareTag("Player"))
-			{
-				victim.TakeDamage(damage, this.gameObject);
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Ищем игрока
+        var player = collision.gameObject.GetComponentInParent<SecMainCharacter>();
+        
+        if (player != null)
+        {
+            if (!playerOnly) return;
+            
+            player.Damage(damage, this.gameObject.transform);
+            
+            if (onHitVFX != null)
+                Instantiate(onHitVFX, transform.position, Quaternion.identity);
 
-				if (onHitVFX != null)
-					Instantiate(onHitVFX, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+            return;
+        }
 
-				Destroy(gameObject);
-			}
-		}
-	}
+        // Если это не игрок, ищем HP (для врагов)
+        HP victim = collision.gameObject.GetComponentInParent<HP>();
+        if (victim != null)
+        {
+            if (playerOnly) return;
+            
+            victim.TakeDamage(damage, this.gameObject);
+
+            if (onHitVFX != null)
+                Instantiate(onHitVFX, transform.position, Quaternion.identity);
+
+            Destroy(gameObject);
+        }
+    }
 
 	private void OnDestroy()
 	{

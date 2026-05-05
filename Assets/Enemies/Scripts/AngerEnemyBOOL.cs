@@ -2,101 +2,168 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class AngerEnemyBOOL : AngerEnemy
 {
-	public Animator anim;
-	public float runSpeed;
-	public float collisionDamage;
-	public float waitBeforeRunTime;
-	public float bounceTime;
-	public float huntTime;
-	public float rangeToLooseTarget;
-	public IdleEnemy idleBehavior;
+    [Header("���������")]
+    public float aggroRange = 10f;         
+    public float looseRange = 20f;         
 
-	private bool run = false;
-	private float sqrtRangeToLooseTarget;
-	private float huntStartTime;
+    [Header("����� �����")]
+    public float attackTime = 15f;        
+    public float vulnerableTime = 5f;
 
-	private void Start()
-	{
-		sqrtRangeToLooseTarget = rangeToLooseTarget * rangeToLooseTarget;
-	}
+    [Header("���������")]
+    public float runSpeed = 4f;
+    public float collisionDamage = 3f;
+    public float bounceTime = 0.3f;
 
-	public void SetTarget(Transform newTarget)
-	{
-		target = newTarget;
-	}
+    [Header("������")]
+    public Animator anim;
+    public IdleEnemy idleBehavior;
 
-	public override void TurnOn(Transform target)
-	{
-		base.TurnOn(target);
+    private Rigidbody2D rb;
+    private Vector3 targetPosition;
 
-		anim.SetBool("state", true);
-		StartCoroutine(WaitAndRun(waitBeforeRunTime));
-		huntStartTime = Time.time;
-	}
+    // ������ �����
+    private bool run = false;                 
+    private bool isVulnerablePhase = false;   // false = �����, true = ������
+    private float cycleTimer = 0f;
+    private bool isActive = false;            // ���� ������� ������ � ���� �����
 
-	private IEnumerator LooseTarget()
-	{
-		run = false;
-		anim.SetBool("state", false);
-		yield return new WaitForSeconds(waitBeforeRunTime);
-		idleBehavior.MakePeace();
-		idleBehavior.enabled = true;
-		this.enabled = false;
-	}
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
-	private IEnumerator WaitAndRun(float time)
-	{
-		run = false;
-		yield return new WaitForSeconds(time);
-		run = true;
-	}
+    public override void TurnOn(Transform newTarget)
+    {
+        Debug.Log($"[AngerEnemyBOOL] TurnOn called! Target: {newTarget.name}, isActive was: {isActive}");
+        base.TurnOn(newTarget);
+        targetPosition = newTarget.position;
+        isActive = true;
+        cycleTimer = 0f;
+        isVulnerablePhase = false;
+        
+        // Принудительно будим физику
+        if (rb != null)
+        {
+            rb.WakeUp();
+            Debug.Log("[AngerEnemyBOOL] Rigidbody2D wake up called");
+        }
+        
+        Debug.Log($"[AngerEnemyBOOL] After TurnOn: target={(target != null ? target.name : "NULL")}, isActive={isActive}");
+    }
 
-	private void Update()
-	{
-		if (!run)
-			return;
+    private void OnEnable()
+    {
+        Debug.Log($"[AngerEnemyBOOL] OnEnable called, enabled: {enabled}, target: {(target != null ? target.name : "NULL")}");
+    }
 
-		if (Vector3.SqrMagnitude(target.position - transform.position) > sqrtRangeToLooseTarget ||
-				Time.time - huntStartTime > huntTime)
-		{
-			StartCoroutine(LooseTarget());
-			return;
-		}
+    private void OnDisable()
+    {
+        Debug.Log($"[AngerEnemyBOOL] OnDisable called, enabled: {enabled}");
+    }
 
-		float speedScale = 1;
-		if (target.position.x < transform.position.x)
-			speedScale = -1;
+    private void Update()
+    {
+        if (target == null) return;
+        targetPosition = target.position;
 
-		transform.position += speedScale * runSpeed * Time.deltaTime * Vector3.right;
-	}
+        // ���� ����� ������� ������ � ���������� ����������
+        float sqrDist = Vector3.SqrMagnitude(targetPosition - transform.position);
+        if (sqrDist > looseRange * looseRange)
+        {
+            isActive = false;
+            run = false;
+            anim.SetBool("state", false);
+            rb.velocity = Vector2.zero;
+            if (idleBehavior != null)
+            {
+                idleBehavior.MakePeace();
+                idleBehavior.enabled = true;
+            }
+            this.enabled = false;
+            return;
+        }
 
-	private IEnumerator BounceOut(float time, bool isRight)
-	{
-		float scale = 1;
-		if(!isRight)
-			scale = -1;
+        // ���� ����� ��� �� � ���� ����� � ������ ���
+        if (!isActive && sqrDist > aggroRange * aggroRange)
+        {
+            return;
+        }
 
-		run = false;
-		for(float t = 0; t < 1; t += Time.deltaTime / time)
-		{
-			transform.position += scale * runSpeed * (1.25f - t) * Time.deltaTime * Vector3.right;
-			yield return null;
-		}
+        // ����� � ���� � ���������/���������� ����
+        isActive = true;
+        cycleTimer += Time.deltaTime;
 
-		run = true;
-	}
+        // === ���� 1: ����� (run = true) ===
+        if (!isVulnerablePhase)
+        {
+            if (cycleTimer >= attackTime)
+            {
+                // ������� � �������� ����
+                isVulnerablePhase = true;
+                run = false;
+                anim.SetBool("state", false);
+                rb.velocity = Vector2.zero;
+                cycleTimer = 0f;
+            }
+            else
+            {
+                run = true;
+                anim.SetBool("state", true);
+                ChaseTarget();
+            }
+        }
+        // === ���� 2: ���������� (run = false) ===
+        else
+        {
+            run = false;
+            anim.SetBool("state", false);
 
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (!run)
-			return;
+            if (cycleTimer >= vulnerableTime)
+            {
+                // ������� � ���� �����
+                isVulnerablePhase = false;
+                cycleTimer = 0f;
+            }
+        }
+    }
 
-		if(collision.gameObject.TryGetComponent<HP>(out HP victim))
-		{
-			victim.TakeDamage(collisionDamage, this.gameObject);
-			StartCoroutine(BounceOut(bounceTime, transform.position.x > target.position.x));
-		}
-	}
+    private void ChaseTarget()
+    {
+        float direction = Mathf.Sign(targetPosition.x - transform.position.x);
+        Vector2 newPos = rb.position + new Vector2(direction * runSpeed * Time.deltaTime, 0f);
+        rb.MovePosition(newPos);
+    }
+
+    private IEnumerator BounceOut(float time, bool isRight)
+    {
+        rb.velocity = Vector2.zero;
+        Vector2 dir = isRight ? Vector2.right : Vector2.left;
+        float elapsed = 0f;
+
+        while (elapsed < time)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / time;
+            float speed = runSpeed * (1f - t);
+            rb.MovePosition(rb.position + dir * speed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent<HP>(out HP victim))
+        {
+            // ���� ��������� ������, �� � ���� ����� � ������
+            float damage = isVulnerablePhase ? collisionDamage * 0.5f : collisionDamage;
+            victim.TakeDamage(damage, this.gameObject);
+
+            bool isRight = transform.position.x > targetPosition.x;
+            StartCoroutine(BounceOut(bounceTime, isRight));
+        }
+    }
 }

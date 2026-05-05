@@ -77,7 +77,6 @@ public class IdleEnemy : MonoBehaviour
             moveVector.x = -patroolSpeed;
     }
 
-    // ВОТ ЗДЕСЬ ИСПРАВЛЕНИЕ: проверка на скрипт игрока
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<SecMainCharacter>() != null)
