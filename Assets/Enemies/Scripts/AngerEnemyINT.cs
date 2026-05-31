@@ -6,93 +6,90 @@ using TMPro;
 [RequireComponent(typeof(Rigidbody2D))]
 public class AngerEnemyINT : AngerEnemy
 {
-    [Header("Настройки Атаки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")]
     public float attackCooldown = 2f;
     public float delayBeforeAttack = 0.5f;
-    public float detectionRadius = 20f; // Макс. дистанция триггера
+    public float detectionRadius = 20f; // пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-    [Header("Настройки Кувалды")]
-    [Tooltip("Дистанция, на которой враг БИТЬ кувалдой (с учетом его размера)")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+    [Tooltip("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")]
     public float clubDistance = 4.5f;
 
-    [Header("Настройки Движения")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     public float moveSpeed = 3f;
-    public float stopingDistance = 8f;   // Дистанция, с которой он перестает ехать и стреляет
+    public float stopingDistance = 8f;   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-    [Header("Ссылки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+    public AudioSource motorSound;
+    public AudioSource clubSound;
+    public AudioSource laserSound;
+    public AudioSource rocketSound;
+
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅ")]
     public TextMeshProUGUI commantText;
     public Animator animator;
 
     private Rigidbody2D rb;
-    // Раздельные таймеры для приоритета
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private float lastClubTime;
     private float lastRangedTime;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // Инициализируем таймеры в прошлом, чтобы можно было атаковать сразу
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         lastClubTime = -100f;
         lastRangedTime = -100f;
+        StopAllSounds();
+    }
+
+    private void OnDisable()
+    {
+        StopAllSounds();
     }
 
     private void Update()
     {
         if (target == null) return;
 
-        // Считаем реальную дистанцию (в метрах)
-        // Учитываем смещение + Vector3.up * 2, как было в оригинале
         float distance = Vector3.Distance(target.position, (transform.position + Vector3.up * 2));
 
-        // === ПРИОРИТЕТНАЯ МАШИНА СОСТОЯНИЙ ===
+        if (distance > detectionRadius)
+        {
+            StopAllSounds();
+            MoveTowards(target.position);
+            return;
+        }
 
-        // ПРИОРИТЕТ 1: КУВАЛДА (Ближний бой)
-        // Если игрок в зоне удара — ВСЁ БРОСАЕМ И БЬЕМ
+        if (motorSound != null && !motorSound.isPlaying)
+            motorSound.Play();
+
         if (distance < clubDistance)
         {
-            // Проверяем кулдаун ТОЛЬКО для кувалды
             if (Time.time - lastClubTime >= attackCooldown)
             {
                 lastClubTime = Time.time;
-                // Сбрасываем таймер стрельбы, чтобы при отходе не стрелял мгновенно
                 lastRangedTime = Time.time;
 
                 AttackClub();
-                return; // Завершаем Update, чтобы не сработало движение или стрельба
             }
+            return;
         }
 
-        // ПРИОРИТЕТ 2: СТРЕЛЬБА (Средний/Дальний бой)
-        // Если не бьем кувалдой, но в зоне поражения — стреляем
-        else if (distance <= detectionRadius)
-        {
-            // Если мы еще далеко до "боевой позиции" — доезжаем
-            if (distance > stopingDistance)
-            {
-                MoveTowards(target.position);
-            }
-
-            // Стреляем, если прошел кулдаун стрельбы
-            if (Time.time - lastRangedTime >= attackCooldown)
-            {
-                lastRangedTime = Time.time;
-                // При стрельбе сбрасываем таймер кувалды, чтобы не махал ею сразу после выстрела
-                lastClubTime = Time.time;
-
-                if (Random.Range(0, 100) > 50) AttackLazer();
-                else AttackRocket();
-            }
-        }
-
-        // ПРИОРИТЕТ 3: ПРЕСЛЕДОВАНИЕ
-        // Если игрок дальше зоны поражения (хотя триггер должен был отключить скрипт, но на всякий случай)
-        else
-        {
+        if (distance > stopingDistance)
             MoveTowards(target.position);
+
+        if (Time.time - lastRangedTime >= attackCooldown)
+        {
+            lastRangedTime = Time.time;
+            lastClubTime = Time.time;
+
+            if (Random.Range(0, 100) > 50) AttackLazer();
+            else AttackRocket();
         }
     }
 
-    // Функция движения
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private void MoveTowards(Vector3 targetPos)
     {
         float speedScale = (targetPos.x < transform.position.x) ? -1f : 1f;
@@ -102,6 +99,7 @@ public class AngerEnemyINT : AngerEnemy
 
     private void AttackClub()
     {
+        if (clubSound != null) clubSound.Play();
         if (target.position.x < transform.position.x)
         {
             commantText.text = "195";
@@ -116,6 +114,7 @@ public class AngerEnemyINT : AngerEnemy
 
     private void AttackLazer()
     {
+        if (laserSound != null) laserSound.Play();
         if (target.position.x < transform.position.x)
         {
             commantText.text = "5";
@@ -130,6 +129,7 @@ public class AngerEnemyINT : AngerEnemy
 
     private void AttackRocket()
     {
+        if (rocketSound != null) rocketSound.Play();
         if (target.position.x < transform.position.x)
         {
             commantText.text = "18";
@@ -140,6 +140,18 @@ public class AngerEnemyINT : AngerEnemy
             commantText.text = "15";
             StartCoroutine(DelayedAnimatorTrigger("rightRocket", delayBeforeAttack));
         }
+    }
+
+    private void StopAllSounds()
+    {
+        if (motorSound != null && motorSound.isPlaying)
+            motorSound.Stop();
+        if (clubSound != null && clubSound.isPlaying)
+            clubSound.Stop();
+        if (laserSound != null && laserSound.isPlaying)
+            laserSound.Stop();
+        if (rocketSound != null && rocketSound.isPlaying)
+            rocketSound.Stop();
     }
 
     private IEnumerator DelayedAnimatorTrigger(string trigger, float delay)

@@ -19,6 +19,15 @@ public class DamageSource : MonoBehaviour
         if (!work)
             return;
 
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по слою Enemy
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            return;
+
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по компонентам
+        if (collision.GetComponentInParent<IdleEnemy>() != null ||
+            collision.GetComponentInParent<AngerEnemy>() != null)
+            return;
+
         var player = collision.gameObject.GetComponentInParent<SecMainCharacter>();
 
         if (playerOnly)
@@ -49,9 +58,15 @@ public class DamageSource : MonoBehaviour
             return;
         }
 
+        // Если playerOnly = false, всё равно игнорируем врагов
         HP victim = collision.gameObject.GetComponentInParent<HP>();
         if (victim != null)
         {
+            // Дополнительная проверка: не является ли жертва врагом
+            if (victim.GetComponentInParent<IdleEnemy>() != null ||
+                victim.GetComponentInParent<AngerEnemy>() != null)
+                return;
+
             victim.TakeDamage(damage, this.gameObject);
 
             Rigidbody2D victimRb = victim.GetComponent<Rigidbody2D>();

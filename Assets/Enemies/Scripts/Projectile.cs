@@ -43,6 +43,19 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по слою Enemy
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            return;
+
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по компонентам
+        if (collision.GetComponentInParent<IdleEnemy>() != null ||
+            collision.GetComponentInParent<AngerEnemy>() != null)
+            return;
+
+        // ИГНОРИРУЕМ TeleportObj по тегу
+        if (collision.CompareTag("TeleportObj"))
+            return;
+
         // Ищем игрока
         var player = collision.gameObject.GetComponentInParent<SecMainCharacter>();
         
@@ -64,6 +77,11 @@ public class Projectile : MonoBehaviour
         if (victim != null)
         {
             if (playerOnly) return;
+
+            // Дополнительная проверка: не является ли жертва врагом
+            if (victim.GetComponentInParent<IdleEnemy>() != null ||
+                victim.GetComponentInParent<AngerEnemy>() != null)
+                return;
             
             victim.TakeDamage(damage, this.gameObject);
 

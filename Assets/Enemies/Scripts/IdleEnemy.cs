@@ -41,19 +41,30 @@ public class IdleEnemy : MonoBehaviour
     {
         enabled = true;
         angry = false;
-        lastAngerTime = Time.time;
     }
 
     public void MakeAngry(bool flag, GameObject damageSource)
     {
-        if (isStarting) return;
+        Debug.Log($"[IdleEnemy] MakeAngry(flag={flag}, src={damageSource?.name}) | isStarting={isStarting}, angry={angry}, lastAngerTime={lastAngerTime}, cooldown={angerCooldown}, time={Time.time}");
 
-        if (angry == flag)
-            return;
+        if (isStarting) { Debug.Log("[IdleEnemy] BLOCKED: isStarting"); return; }
+
+        if (angry == flag) { Debug.Log("[IdleEnemy] BLOCKED: angry == flag"); return; }
 
         if (flag == true && Time.time - lastAngerTime < angerCooldown)
+        {
+            Debug.Log($"[IdleEnemy] BLOCKED: cooldown (lastAngerTime={lastAngerTime}, diff={Time.time - lastAngerTime}, cd={angerCooldown})");
             return;
+        }
 
+        // ТОЛЬКО ИГРОК! Игнорируем врагов
+        if (flag == true && (damageSource == null || damageSource.GetComponent<SecMainCharacter>() == null))
+        {
+            Debug.Log("[IdleEnemy] BLOCKED: not player");
+            return;
+        }
+
+        Debug.Log("[IdleEnemy] MakeAngry: ACTIVATING!");
         angry = flag;
         this.enabled = !flag;
         angryBehavior.enabled = flag;
@@ -79,8 +90,22 @@ public class IdleEnemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<SecMainCharacter>() != null)
+        Debug.Log($"[IdleEnemy] OnTriggerEnter2D! self.enabled={enabled}, angry={angry}, collider={collision.name}, tag={collision.tag}, layer={collision.gameObject.layer}");
+
+        // Игнорируем врагов (тег TeleportableObject)
+        if (collision.CompareTag("TeleportObj"))
+            return;
+
+        // Игнорируем объекты на слое Enemy (чтобы враги не атаковали друг друга)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            return;
+
+        var player = collision.GetComponent<SecMainCharacter>();
+        Debug.Log($"[IdleEnemy] SecMainCharacter found: {player != null}");
+
+        if (player != null)
         {
+            Debug.Log($"[IdleEnemy] Calling MakeAngry(true, {collision.name})");
             MakeAngry(collision.gameObject);
         }
     }
@@ -88,6 +113,14 @@ public class IdleEnemy : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (angry)
+            return;
+
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по слою Enemy
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            return;
+
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по компоненту IdleEnemy
+        if (collision.gameObject.GetComponent<IdleEnemy>() != null)
             return;
 
         if (collision.gameObject.TryGetComponent<HP>(out HP victim))

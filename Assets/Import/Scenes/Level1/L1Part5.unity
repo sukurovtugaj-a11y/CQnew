@@ -2189,7 +2189,7 @@ EdgeCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1}
+  m_Offset: {x: 0, y: -0.65}
   m_EdgeRadius: 0
   m_Points:
   - {x: -2.000024, y: -0.0012608636}
@@ -6170,6 +6170,7 @@ GameObject:
   - component: {fileID: 538787466}
   - component: {fileID: 538787465}
   - component: {fileID: 538787464}
+  - component: {fileID: 538787467}
   m_Layer: 3
   m_Name: FallGround (6)
   m_TagString: Untagged
@@ -6232,7 +6233,9 @@ MonoBehaviour:
   m_UTess2D: 1
   m_Creator: {fileID: 0}
   m_Modifiers: []
-  m_ColliderSegment: []
+  m_ColliderSegment:
+  - {x: -1.9999793, y: -0.0012900117}
+  - {x: 25.088863, y: -0.0012900117}
 --- !u!1971053207 &538787465
 SpriteShapeRenderer:
   m_ObjectHideFlags: 0
@@ -6307,6 +6310,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
+--- !u!68 &538787467
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538787463}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.65}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -1.9999793, y: -0.0012900117}
+  - {x: 25.088863, y: -0.0012900117}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &544567927
 GameObject:
   m_ObjectHideFlags: 0

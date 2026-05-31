@@ -1,35 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class AngerEnemyBOOL : AngerEnemy
 {
-    [Header("���������")]
+    [Header("Дистанции")]
     public float aggroRange = 10f;         
     public float looseRange = 20f;         
 
-    [Header("����� �����")]
+    [Header("Время циклов")]
     public float attackTime = 15f;        
     public float vulnerableTime = 5f;
 
-    [Header("���������")]
+    [Header("Настройки передвижения")]
     public float runSpeed = 4f;
-    public float collisionDamage = 3f;
-    public float bounceTime = 0.3f;
 
-    [Header("������")]
+    [Header("Ссылки")]
     public Animator anim;
     public IdleEnemy idleBehavior;
+
+    [Header("Звуки фаз")]
+    [Tooltip("Звук для фазы TRUE (уязвимость)")]
+    public AudioSource truePhaseSound;
+    [Tooltip("Звук для фазы FALSE (атака)")]
+    public AudioSource falsePhaseSound;
+
+    [Header("Объекты для фаз")]
+    [Tooltip("Объекты, которые включаются в фазе АТАКИ (TRUE)")]
+    public GameObject[] trueObjects;
+    [Tooltip("Объекты, которые включаются в фазе УЯЗВИМОСТИ (FALSE)")]
+    public GameObject[] falseObjects;
 
     private Rigidbody2D rb;
     private Vector3 targetPosition;
 
-    // ������ �����
+    // Циклы врага
     private bool run = false;                 
-    private bool isVulnerablePhase = false;   // false = �����, true = ������
+    private bool isVulnerablePhase = false;   // false = атака, true = уязвимость
     private float cycleTimer = 0f;
-    private bool isActive = false;            // ���� ������� ������ � ���� �����
+    private bool isActive = false;            // флаг активности врага
+    private float lastPollTime;
 
     private void Start()
     {
@@ -62,15 +72,22 @@ public class AngerEnemyBOOL : AngerEnemy
 
     private void OnDisable()
     {
+        StopAllSounds();
         Debug.Log($"[AngerEnemyBOOL] OnDisable called, enabled: {enabled}");
     }
 
     private void Update()
     {
+        if (!isActive)
+        {
+            PollForPlayer();
+            return;
+        }
+
         if (target == null) return;
         targetPosition = target.position;
 
-        // ���� ����� ������� ������ � ���������� ����������
+        // Проверка выхода за пределы досягаемости
         float sqrDist = Vector3.SqrMagnitude(targetPosition - transform.position);
         if (sqrDist > looseRange * looseRange)
         {
@@ -78,45 +95,58 @@ public class AngerEnemyBOOL : AngerEnemy
             run = false;
             anim.SetBool("state", false);
             rb.velocity = Vector2.zero;
+            StopAllSounds();
             if (idleBehavior != null)
             {
                 idleBehavior.MakePeace();
                 idleBehavior.enabled = true;
             }
-            this.enabled = false;
             return;
         }
 
-        // ���� ����� ��� �� � ���� ����� � ������ ���
-        if (!isActive && sqrDist > aggroRange * aggroRange)
-        {
-            return;
-        }
-
-        // ����� � ���� � ���������/���������� ����
+        // Враг активен — работаем
         isActive = true;
         cycleTimer += Time.deltaTime;
 
-        // === ���� 1: ����� (run = true) ===
+        // === Фаза 1: Атака (run = true, FALSE) ===
         if (!isVulnerablePhase)
         {
             if (cycleTimer >= attackTime)
             {
-                // ������� � �������� ����
+                // Переход в фазу уязвимости (TRUE)
                 isVulnerablePhase = true;
                 run = false;
                 anim.SetBool("state", false);
                 rb.velocity = Vector2.zero;
                 cycleTimer = 0f;
+                
+                // Включаем TRUE объекты (уязвимость), выключаем FALSE
+                SetObjectsActive(trueObjects, true);
+                SetObjectsActive(falseObjects, false);
+
+                // ОСТАНАВЛИВАЕМ звук FALSE, если он играет
+                if (falsePhaseSound != null && falsePhaseSound.isPlaying) 
+                    falsePhaseSound.Stop();
+
+                // Играем звук фазы TRUE
+                if (truePhaseSound != null) truePhaseSound.Play();
             }
             else
             {
                 run = true;
                 anim.SetBool("state", true);
                 ChaseTarget();
+                
+                // Включаем FALSE объекты (атака), выключаем TRUE
+                SetObjectsActive(trueObjects, false);
+                SetObjectsActive(falseObjects, true);
+
+                // Играем звук FALSE на протяжении всей фазы
+                if (falsePhaseSound != null && !falsePhaseSound.isPlaying)
+                    falsePhaseSound.Play();
             }
         }
-        // === ���� 2: ���������� (run = false) ===
+        // === Фаза 2: Уязвимость (run = false, TRUE) ===
         else
         {
             run = false;
@@ -124,11 +154,62 @@ public class AngerEnemyBOOL : AngerEnemy
 
             if (cycleTimer >= vulnerableTime)
             {
-                // ������� � ���� �����
+                // Возврат к атаке (FALSE)
                 isVulnerablePhase = false;
                 cycleTimer = 0f;
+
+                // Включаем FALSE объекты (атака), выключаем TRUE
+                SetObjectsActive(trueObjects, false);
+                SetObjectsActive(falseObjects, true);
+
+                // ОСТАНАВЛИВАЕМ звук TRUE, если он играет
+                if (truePhaseSound != null && truePhaseSound.isPlaying) 
+                    truePhaseSound.Stop();
+
+                // Играем звук фазы FALSE
+                if (falsePhaseSound != null) falsePhaseSound.Play();
+            }
+            else
+            {
+                // Включаем TRUE объекты (уязвимость), выключаем FALSE
+                SetObjectsActive(trueObjects, true);
+                SetObjectsActive(falseObjects, false);
+
+                // Играем звук TRUE на протяжении всей фазы
+                if (truePhaseSound != null && !truePhaseSound.isPlaying)
+                    truePhaseSound.Play();
             }
         }
+    }
+
+    private void PollForPlayer()
+    {
+        if (Time.time - lastPollTime < 1f) return;
+        lastPollTime = Time.time;
+
+        Collider2D[] hits = new Collider2D[10];
+        int count = Physics2D.OverlapCircleNonAlloc(
+            transform.position, aggroRange, hits);
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hits[i].gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                continue;
+            if (hits[i].GetComponent<SecMainCharacter>() != null)
+            {
+                if (idleBehavior != null)
+                    idleBehavior.MakeAngry(hits[i].gameObject);
+                return;
+            }
+        }
+    }
+
+    private void StopAllSounds()
+    {
+        if (truePhaseSound != null && truePhaseSound.isPlaying)
+            truePhaseSound.Stop();
+        if (falsePhaseSound != null && falsePhaseSound.isPlaying)
+            falsePhaseSound.Stop();
     }
 
     private void ChaseTarget()
@@ -138,32 +219,13 @@ public class AngerEnemyBOOL : AngerEnemy
         rb.MovePosition(newPos);
     }
 
-    private IEnumerator BounceOut(float time, bool isRight)
+    private void SetObjectsActive(GameObject[] objects, bool isActive)
     {
-        rb.velocity = Vector2.zero;
-        Vector2 dir = isRight ? Vector2.right : Vector2.left;
-        float elapsed = 0f;
-
-        while (elapsed < time)
+        if (objects == null) return;
+        foreach (var obj in objects)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / time;
-            float speed = runSpeed * (1f - t);
-            rb.MovePosition(rb.position + dir * speed * Time.deltaTime);
-            yield return null;
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<HP>(out HP victim))
-        {
-            // ���� ��������� ������, �� � ���� ����� � ������
-            float damage = isVulnerablePhase ? collisionDamage * 0.5f : collisionDamage;
-            victim.TakeDamage(damage, this.gameObject);
-
-            bool isRight = transform.position.x > targetPosition.x;
-            StartCoroutine(BounceOut(bounceTime, isRight));
+            if (obj != null)
+                obj.SetActive(isActive);
         }
     }
 }

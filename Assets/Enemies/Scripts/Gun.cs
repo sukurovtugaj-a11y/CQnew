@@ -8,7 +8,7 @@ public class Gun : MonoBehaviour
     public Projectile projectilePrefab;
 
     [Header("Звук")]
-    public AudioSource shootAudioSource;  // Одно поле для звука выстрела 
+    public AudioSource shootAudioSource;  
 
     public void Shoot()
     {

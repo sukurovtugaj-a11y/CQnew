@@ -106,6 +106,8 @@
     <Compile Include="Assets\Import\Scripts\SettingsCore.cs" />
     <Compile Include="Assets\Import\Scripts\UI\PanelFader.cs" />
     <Compile Include="Assets\Import\Scripts\UI\UpgradeManager.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyNewBool.cs" />
+    <Compile Include="Assets\Enemies\Scripts\EnemyKnockback.cs" />
     <Compile Include="Assets\Import\Scripts\UI\SequentialAudioPlayer.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Components\PlayerMovementComponent.cs" />
     <Compile Include="Assets\Import\Scripts\CharacterScripts\Teleports\TeleportableObject.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Assets\Import\Scripts\CharacterScripts\DeathZone.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuArrowManager.cs" />
     <Compile Include="Assets\Import\Scripts\UI\DeathMenuManager.cs" />
+    <Compile Include="Assets\Enemies\Scripts\AngerEnemyNewNewBool.cs" />
     <Compile Include="Assets\Import\Scripts\UI\MenuScript.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\GrassTrigger.cs" />
     <Compile Include="Assets\Import\Scripts\Levels\OPollMover.cs" />

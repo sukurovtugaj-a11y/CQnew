@@ -19,6 +19,10 @@ public class AngerEnemyFLOAT : AngerEnemy
     public float floatAmplitude = 1.5f; // Амплитуда парения (визуальная)
     public float floatSpeed = 2f;       // Скорость парения
 
+    [Header("Звуки")]
+    public AudioSource motorSound;
+    public AudioSource laserSound;
+
     [Header("Ссылки")]
     public TextMeshProUGUI commantText;
     public Animator animator;
@@ -37,6 +41,12 @@ public class AngerEnemyFLOAT : AngerEnemy
         floatOffsetStart = Random.Range(0f, Mathf.PI * 2);
         lastLaserTime = -100f;
         basePosition = transform.position;
+        StopAllSounds();
+    }
+
+    private void OnDisable()
+    {
+        StopAllSounds();
     }
 
     public override void TurnOn(Transform newTarget)
@@ -55,10 +65,14 @@ public class AngerEnemyFLOAT : AngerEnemy
         // === 2. Если игрок слишком далеко — просто летим к нему ===
         if (distance > aggroRadius)
         {
+            StopAllSounds();
             MoveTowards(target.position);
             ApplyFloatAnimation();
             return;
         }
+
+        if (motorSound != null && !motorSound.isPlaying)
+            motorSound.Play();
 
         // === 3. ЛАЗЕР: приоритетная атака ===
         // Атакуем, если: игрок в радиусе лазера + не на КД + не в процессе прицеливания
@@ -114,6 +128,7 @@ public class AngerEnemyFLOAT : AngerEnemy
     /// </summary>
     private IEnumerator AttackLazer()
     {
+        if (laserSound != null) laserSound.Play();
         commantText.text = "6.875";
 
         Vector2 direction;
@@ -141,6 +156,14 @@ public class AngerEnemyFLOAT : AngerEnemy
         // Ждём завершения анимации перед сбросом флага
         yield return new WaitForSeconds(delayBeforeAttack + 0.1f);
         isAiming = false;
+    }
+
+    private void StopAllSounds()
+    {
+        if (motorSound != null && motorSound.isPlaying)
+            motorSound.Stop();
+        if (laserSound != null && laserSound.isPlaying)
+            laserSound.Stop();
     }
 
     private IEnumerator DelayedAnimatorTrigger(string trigger, float delay)

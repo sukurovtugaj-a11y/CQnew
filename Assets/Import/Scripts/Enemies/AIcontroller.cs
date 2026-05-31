@@ -61,6 +61,18 @@ public class AIcontroller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по слою Enemy
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            return;
+
+        // ИГНОРИРУЕМ ВРАГОВ - проверка по компоненту IdleEnemy или AngerEnemy
+        if (collision.GetComponent<IdleEnemy>() != null || collision.GetComponent<AngerEnemy>() != null)
+            return;
+
+        // ИГНОРИРУЕМ TeleportObj по тегу
+        if (collision.CompareTag("TeleportObj"))
+            return;
+
         var player = collision.GetComponent<SecMainCharacter>();
         if (player != null)
         {

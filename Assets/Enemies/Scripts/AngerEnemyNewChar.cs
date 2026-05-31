@@ -40,15 +40,23 @@ public class AngerEnemyNewCHAR : AngerEnemy
         if (baseCollider == null) baseCollider = GetComponent<BoxCollider2D>();
 
         DeactivateAllForms();
+        StopAllSounds();
     }
 
     private void Update()
     {
-        if (target == null || isAttacking) return;
+        if (target == null) return;
+
+        float distance = Vector3.Distance(target.position, transform.position);
+        if (distance > aggroRadius)
+        {
+            StopAllSounds();
+        }
+
+        if (isAttacking) return;
 
         FaceTarget();
 
-        float distance = Vector3.Distance(target.position, transform.position);
         bool playerOnRight = target.position.x >= transform.position.x;
 
         if (distance > aggroRadius)
@@ -245,7 +253,16 @@ public class AngerEnemyNewCHAR : AngerEnemy
 
     private void OnDisable()
     {
+        StopAllSounds();
         isAttacking = false;
         DeactivateAllForms();
+    }
+
+    private void StopAllSounds()
+    {
+        if (zigzagAudioSource != null && zigzagAudioSource.isPlaying)
+            zigzagAudioSource.Stop();
+        if (chargeAudioSource != null && chargeAudioSource.isPlaying)
+            chargeAudioSource.Stop();
     }
 }
